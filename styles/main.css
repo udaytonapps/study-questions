@@ -1,1 +1,175 @@
 /* Main CSS file */
+body {
+    background: #efefef;
+}
+@media only screen and (min-width : 768px) {
+    body {
+
+    }
+}
+
+.big-shadow {
+    -webkit-box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+    box-shadow: 0 8px 17px 0 rgba(0,0,0,.2),0 6px 20px 0 rgba(0,0,0,.19);
+}
+.small-shadow {
+    -webkit-box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 3px 10px 0 rgba(0,0,0,.19);
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.2),0 3px 10px 0 rgba(0,0,0,.19);
+}
+#toolTitle {
+    line-height: 42px;
+}
+
+/* The side navigation menu */
+.side-nav {
+    height: 100%;
+    width: 200px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: -200px;
+    background-color: #111;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+.side-nav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #919191;
+    display: block;
+    transition: 0.2s;
+}
+.side-nav a:hover {
+    color: #f1f1f1;
+}
+.side-nav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 18px;
+    font-size: 24px;
+    margin-left: 50px;
+    font-weight: lighter;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    color: gray;
+    padding: 12px 16px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-icon:focus {
+    outline:none;
+    color: darkgray;
+}
+.btn-icon:hover {
+    outline:none;
+    color: gray;
+}
+
+
+
+.btn-active-up{
+    background: none;
+    border: none;
+    color: green;
+    padding: 12px 16px;
+    font-size: 16px;
+}
+
+.btn-active-up:focus {
+    outline:none;
+    color: darkgreen;
+}
+
+.btn-active-up:hover {
+    outline:none;
+    color: green;
+}
+
+.btn-active-down{
+    background: none;
+    border: none;
+    color: red;
+    padding: 12px 16px;
+    font-size: 16px;
+}
+
+.btn-active-down:focus {
+    outline:none;
+    color: darkred;
+}
+
+.btn-active-down:hover {
+    outline:none;
+    color: red;
+}
+
+.pointsPlace{
+    margin-left: 7px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.negativePointsPlace{
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.pointsPlaceViewQuestion{
+    margin-left: 3px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.negativePointsPlaceViewQuestion{
+    margin-left: -4px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.unVerified{
+    text-decoration: none;
+    color: gray;
+}
+
+.unVerified:focus {
+    outline:none;
+    text-decoration: none;
+    color: darkgray;
+}
+
+.unVerified:hover {
+    outline:none;
+    text-decoration: none;
+    color: darkgray;
+}
+
+.verified{
+    text-decoration: none;
+    color: green;
+}
+
+.verified:focus {
+    outline:none;
+    text-decoration: none;
+    color: darkgreen;
+}
+
+.verified:hover {
+    outline:none;
+    text-decoration: none;
+    color: darkgreen;
+}
+
+.verifier{
+    padding-top: 0px;
+    font-size: 2em;
+}
+
+.spaceAbove{
+    margin-top: 1em;
+}
