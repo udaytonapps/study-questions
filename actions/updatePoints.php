@@ -20,8 +20,12 @@ $oldPoints = $SQ_DAO->getpoints($question_id);
 $previousVote = $SQ_DAO->getStudentVote($question_id, $user_id);
 if($direction == "up"){
     $points = $oldPoints["votes"] + 1;
-} else {
+} else if($direction == "doubleUp"){
+    $points = $oldPoints["votes"] + 2;
+} else if($direction == "down"){
     $points = $oldPoints["votes"] - 1;
+} else{
+    $points = $oldPoints["votes"] - 2;
 }
 $SQ_DAO->updatePoints($question_id, $points);
 

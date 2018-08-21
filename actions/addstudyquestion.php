@@ -19,10 +19,6 @@ $SQ_DAO = new SQ_DAO($PDOX, $p);
     $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
     $currentTime = $currentTime->format("Y-m-d H:i:s");
     if ($questionId > -1) {
-        echo($questionId);
-        echo($questionText);
-        echo($answerText);
-        echo($currentTime);
         $SQ_DAO->updateQuestion($questionId, $questionText, $answerText, $currentTime);
     } else {
         $SQ_DAO->createQuestion($_SESSION["sq_id"], $questionText, $answerText, $currentTime, $name, $USER->id);

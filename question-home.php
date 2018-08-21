@@ -28,9 +28,10 @@ $questions = $SQ_DAO->getQuestions($_SESSION["sq_id"]);
 
 $toolTitle = $SQ_DAO->getMainTitle($_SESSION["sq_id"]);
 
-if ($toolTitle ===""){$toolTitle = "Study Questions";}
+if ($toolTitle ==""){$toolTitle = "Study Questions";}
 
 if ($USER->instructor) {
+    $_SESSION["show"] = true;
     echo('
 
     <div id="sideNav" class="side-nav">
@@ -50,11 +51,11 @@ if ($USER->instructor) {
     </nav>
 ');
 } else {
+    $_SESSION["show"] = false;
 echo('
 
     <div id="sideNav" class="side-nav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span class="fa fa-times"></span></a>
-        <a href="splash.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Getting Started</a>
         <a href="question-home.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Questions </a>
     </div>
 
@@ -68,11 +69,6 @@ echo('
 ');
 }
 
-if ($USER->instructor ) {
-    $count = 1;
-} else {
-    $count = $SQ_DAO->countQuestionsForStudent($USER->id);
-}
 $name =$SQ_DAO->findDisplayName($USER->id);
 echo(' 
 <div class="container-fluid">
@@ -86,13 +82,8 @@ echo('
         echo('  
         <a href="#addQuestion" data-toggle="modal" class="btn btn-success small-shadow"><span class="fa fa-plus"></span> Add Question</a>
     </div>');
-    if($count < 1){
-        echo('<div class="col-sm-10 col-sm-offset-1">
-            <h2> You must add a question and answer before you can see questions and answers submitted by others.</h2>
-        </div>');
-    }
+
     echo('</div>
-    <hr>
     <div class="col-sm-11 col-sm-offset-1 text-left "> 
         <div class="modal fade" id="addQuestion" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
@@ -119,118 +110,92 @@ echo('
         </div>
     </div>
 </div>
-<hr />
 ');
 
-if($count > 0){
-    echo('<div class="col-sm-10 col-sm-offset-1">');
-        echo('<p>Click on the cards below to respond to study questions and view answers</p>
-        <div class="row">');
-        $i = 0;
-        foreach ($questions as $question) {
-            $i++;
-            $up = "up";
-            $down = "down";
-            echo('<div class="col-sm-11">');
-            $question_id = $question["question_id"];
-            $answerId = -1;
-            $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
-            echo('<div class="list-group-item">
-                    <div class="row">
-                        <div class="col-sm-1 text-center">
-                            <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
-                            <button id="upVote' . $question_id . '" ');
-                                if ($previousVote["vote"] === "up") {
-                                    echo('class="btn btn-active-up btn-icon"');
-                                } else {
-                                    echo('class="btn btn-icon"');
-                                }
-                                echo('onclick="SQuestion.changeStateUp(' . $question_id . ')"> 
-                                <span class="fa fa-arrow-up"></span>
-                            </button>');
-                            if($question["votes"] < 0){
-                                echo ('<h3 class="negativePointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
+    echo('<p>Click on the cards below to respond to study questions and view answers</p>
+    <div class="row">');
+    $i = 0;
+    foreach ($questions as $question) {
+        $i++;
+        $up = "up";
+        $down = "down";
+        echo('<div class="col-sm-11">');
+        $question_id = $question["question_id"];
+        $answerId = -1;
+        $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
+        echo('<div class="list-group-item">
+                <div class="row">
+                    <div class="col-sm-1 text-center">
+                        <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
+                        <button id="upVote' . $question_id . '"  ');
+                            if ($previousVote["vote"] === "up") {
+                                echo('class="btn btn-active-up btn-icon compressed"');
                             } else {
-                                echo('<h3 class="pointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                                echo('class="btn btn-icon compressed"');
                             }
-                            echo ('<button id="downVote' . $question_id . '"');
-                                if ($previousVote["vote"] === "down") {
-                                    echo('class="btn btn-icon btn-active-down"');
-                                } else {
-                                    echo('class="btn btn-icon"');
-                                }
-                                echo('onclick="SQuestion.changeStateDown(' . $question_id . ')"> 
-                                <span class="fa fa-arrow-down"></span>
-                            </button>
-                        </div>
-                        <div class="col-sm-10">');
-                            $dateTime = new DateTime($question["modified"]);
-                            $date = date_format($dateTime, "n/j/y");
-                            $time = date_format($dateTime, "g:iA");
-                            $question_text = substr($question["question_txt"],0,70);
-                            if(strlen( $question["question_txt"] ) > 70){
-                                $question_text = $question_text."...";
+                            echo('onclick="SQuestion.changeStateUp(' . $question_id . ')"> 
+                            <span class="fa fa-arrow-up"></span>
+                        </button>');
+                        if($question["votes"] < 0){
+                            echo ('<h4 class="negativePointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                        } else {
+                            echo('<h4 class="pointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                        }
+                        echo ('<button id="downVote' . $question_id . '"');
+                            if ($previousVote["vote"] === "down") {
+                                echo('class="btn btn-icon btn-active-down compressed"');
+                            } else {
+                                echo('class="btn btn-icon compressed"');
                             }
-                            echo('
-                            <form method="post"  action="actions/viewQuestionForm.php" name="viewQuestionForm' . $i . '">
-                                <input type="hidden" name="viewQuestionId" value="' . $question_id . '"/>
-                                <a href="#"   data-toggle="modal" onclick="viewQuestionForm' . $i . '.submit()">
-                                    <div class="row">
-                                        <div class="col-sm-10">
-                                            <h4>' . $question_text . '</h4>
-                                        </div>');
-                                        if(($USER->instructor) || ($question["user_id"] == $USER->id)){
-                                            echo('
-                                            <div class="col-sm-2">
-                                                <a onclick="return SQuestion.deleteQuestionConfirm();" href="actions/deleteQuestion.php?question_id=' . $question_id . '">
-                                                    <span aria-hidden="true" class="fa fa-lg fa-trash pull-right"></span>
-                                                    <span class="sr-only">Delete Question</span>
-                                                </a>
-                                                <a href="#editQuestion' . $i . '" data-toggle="modal" ><span class="fa fa-lg fa-pencil pull-right"></span></a>
-                                                <div class="modal fade" id="editQuestion' . $i . '" tabindex="-1" role="dialog" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h4 class="modal-title">Add Question and Answer</h4>
-                                                            </div>
-                                                            <form method="post" id="editQuestionForm' . $i . '" action="actions/addstudyquestion.php">
-                                                                <div class="modal-body">
-                                                                    <input type="hidden" name="questionId" id="questionId" value="' . $question_id . '">
-                                                                    <input type="hidden" name="username" id="username" value="' . $name . '">
-                                                                    <input type="hidden" name="page" id="page" value="main">
-                                                                    <label for="questionText">Edit Question Text</label>
-                                                                    <textarea class="form-control" name="questionText" id="questionText" rows="4" autofocus required>' . $question["question_txt"] . '</textarea>
-                                                                    <label for="answerText" class="spaceAbove">Edit Answer Text</label>
-                                                                    <textarea class="form-control" name="answerText" id="answerText" rows="4" autofocus required>' . $question["answer_txt"] . '</textarea>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                                                                    <input type="submit" form="editQuestionForm' . $i . '" class="btn btn-success" value="Save">
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ');
-                                        }
-                                    echo ('</div>
-                                </a>   
-                                <br><br>
+                            echo('onclick="SQuestion.changeStateDown(' . $question_id . ')"> 
+                            <span class="fa fa-arrow-down"></span>
+                        </button>
+                    </div>
+                    <div class="col-sm-11">');
+                        $dateTime = new DateTime($question["modified"]);
+                        $date = date_format($dateTime, "n/j/y");
+                        $time = date_format($dateTime, "g:iA");
+                        $question_text = substr($question["question_txt"],0,55);
+                        if(strlen( $question["question_txt"] ) > 55){
+                            $question_text = $question_text."...";
+                        }
+                        echo('
+                        <form method="post"  action="actions/viewQuestionForm.php" name="viewQuestionForm' . $i . '">
+                            <input type="hidden" name="viewQuestionId" value="' . $question_id . '"/>
+                        </form>
+                            <a href="#"   data-toggle="modal" onclick="viewQuestionForm' . $i . '.submit()">
                                 <div class="row">
-                                    <div class="col-sm-12 text-right">
-                                        <h5>Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</h5>
+                                    <div class="col-sm-10">
+                                        <h4 class="">' . $question_text . '</h4>
                                     </div>
+                                    <div class="col-sm-2">
+                                    ');
+
+                                        $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
+                                        if($verifiedAnswer["understood"]){
+                                            echo('<button title="Understood" id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square pull-right verifier verified mainPageGotThis disabled">');
+                                        } else {
+                                            echo('<button title="Not Yet Understood" id="underStand' . $question_id . '"  class="btn-icon fa fa-square-o pull-right verifier unVerified mainPageGotThis disabled" >');
+                                        }
+                                        echo('</button>');
+                                echo ('</div>
                                 </div>
-                            </form>
-                        </div>
+                            </a>');
+
+                            echo ('
+                            <div class="row">
+                                <div class="col-sm-12 noMargins">
+                                    <h5 class="noMargins">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</h5>
+                                </div>
+                            </div>
                     </div>
                 </div>
-            </form>
-        </div>');
-        }
-    echo('</div>');
-}
+            </div>
+    </div>');
+    }
+echo('</div>');
+
 
 $OUTPUT->footerStart();
 ?>

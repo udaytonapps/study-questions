@@ -12,7 +12,7 @@ $DATABASE_INSTALL = array(
     user_id       INTEGER NOT NULL AUTO_INCREMENT,
     skip_splash   BOOL NOT NULL DEFAULT 0,
     PRIMARY KEY(user_id)
-	
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
     array( "{$CFG->dbprefix}sq_main",
         "create table {$CFG->dbprefix}sq_main (
@@ -22,9 +22,9 @@ $DATABASE_INSTALL = array(
 	link_id     INTEGER NOT NULL,
 	title       VARCHAR(255) NULL,
     modified    datetime NULL,
-    
+
     PRIMARY KEY(sq_id)
-	
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
     array( "{$CFG->dbprefix}sq_questions",
         "create table {$CFG->dbprefix}sq_questions (
@@ -38,30 +38,46 @@ $DATABASE_INSTALL = array(
     votes         INTEGER NOT NULL DEFAULT 0,
     modified      datetime NULL,
     correct       BOOL NOT NULL DEFAULT 0,
-    
+
     CONSTRAINT `{$CFG->dbprefix}sq_ibfk_1`
         FOREIGN KEY (`sq_id`)
         REFERENCES `{$CFG->dbprefix}sq_main` (`sq_id`)
         ON DELETE CASCADE,
 
     PRIMARY KEY(question_id)
-	
+
+) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
+    array( "{$CFG->dbprefix}sq_questions_understood",
+        "create table {$CFG->dbprefix}sq_questions_understood (
+    understood_id     INTEGER NOT NULL AUTO_INCREMENT,
+    question_id   INTEGER NOT NULL,
+    sq_id         INTEGER NOT NULL,
+    user_id       TEXT NULL,
+    understood    BOOL NULL,
+
+    CONSTRAINT `{$CFG->dbprefix}sq_ibfk_5`
+        FOREIGN KEY (`question_id`)
+        REFERENCES `{$CFG->dbprefix}sq_questions` (`question_id`)
+        ON DELETE CASCADE,
+
+    PRIMARY KEY(understood_id)
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
     array( "{$CFG->dbprefix}sq_questions_votes",
         "create table {$CFG->dbprefix}sq_questions_votes (
     vote_id       INTEGER NOT NULL AUTO_INCREMENT,
     question_id   INTEGER NOT NULL,
     sq_id         INTEGER NOT NULL,
-    user_id       TEXT NULL,
+    user_id       TEXT NULL NOT NULL,
     vote          TEXT NULL,
-    
+
     CONSTRAINT `{$CFG->dbprefix}sq_ibfk_3`
         FOREIGN KEY (`question_id`)
         REFERENCES `{$CFG->dbprefix}sq_questions` (`question_id`)
         ON DELETE CASCADE,
 
     PRIMARY KEY(vote_id)
-	
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
     array( "{$CFG->dbprefix}sq_answer",
         "create table {$CFG->dbprefix}sq_answer (
@@ -74,14 +90,14 @@ $DATABASE_INSTALL = array(
 	author       TEXT NULL,
     modified     datetime NULL,
     correct      BOOL NOT NULL DEFAULT 0,
-    
+
     CONSTRAINT `{$CFG->dbprefix}sq_ibfk_2`
         FOREIGN KEY (`question_id`)
         REFERENCES `{$CFG->dbprefix}sq_questions` (`question_id`)
         ON DELETE CASCADE,
-    
+
     PRIMARY KEY(answer_id)
-    
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8"),
     array( "{$CFG->dbprefix}sq_answer_votes",
         "create table {$CFG->dbprefix}sq_answer_votes (
@@ -91,13 +107,13 @@ $DATABASE_INSTALL = array(
     sq_id         INTEGER NOT NULL,
     user_id       TEXT NULL,
     vote          TEXT NULL,
-    
+
     CONSTRAINT `{$CFG->dbprefix}sq_ibfk_4`
         FOREIGN KEY (`answer_id`)
         REFERENCES `{$CFG->dbprefix}sq_answer` (`answer_id`)
         ON DELETE CASCADE,
 
     PRIMARY KEY(vote_id)
-	
+
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8")
 );

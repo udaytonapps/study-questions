@@ -13,7 +13,6 @@ $p = $CFG->dbprefix;
 $SQ_DAO = new SQ_DAO($PDOX, $p);
 
 $skipSplash = $SQ_DAO->skipSplash($USER->id);
-$skipSplash = false;
 $toolTitle = $SQ_DAO->getMainTitle($_SESSION["sq_id"]);
 
  //Start of the output
