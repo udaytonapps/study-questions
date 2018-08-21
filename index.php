@@ -35,8 +35,12 @@ if ( $USER->instructor ) {
     }
 } else {
     $mainId = $SQ_DAO->getMainID($CONTEXT->id, $LINK->id);
+    $count = $SQ_DAO->countQuestionsForStudent($USER->id);
     if (!$mainId) {
-        echo ("<h1>Instructor needs to do stuff");
+        echo ("<h1>The instructor has not set up this tool yet. Please contact your instructor for more info.</h1>");
+    } else if($count < 1) {
+        $_SESSION["sq_id"] = $mainId;
+        header( 'Location: '.addSession('studentSplash.php') ) ;
     } else {
         $_SESSION["sq_id"] = $mainId;
         header( 'Location: '.addSession('question-home.php') ) ;

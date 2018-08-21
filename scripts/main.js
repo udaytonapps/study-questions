@@ -76,6 +76,19 @@ function toggleAddAnswer() {
     }
 }
 
+function revealAnswers() {
+    document.getElementById("hideAnswer").classList.remove('showthis');
+    document.getElementById("hideAnswer").classList.add('hider');
+    document.getElementById("answerblock").classList.remove('hider');
+    document.getElementById("answerblock").classList.add('showthis');
+    document.getElementById("addAnswerButton").classList.remove('hider');
+}
+
+$("#hideAnswer").click(function () {
+    var vidCon = document.getElementById("hideAnswer");
+    $(vidCon).toggleClass("transition");
+});
+
 var SQuestion = (function () {
     var sQuestion = {};
     sQuestion.changeStateUp = function (id) {
@@ -86,6 +99,7 @@ var SQuestion = (function () {
         var points = pointContainer.innerHTML;
         var pointVal =parseInt(points);
         var upButton = document.getElementById(directionUp);
+        var downButton = document.getElementById(directionDown);
         if(upButton.classList.contains('btn-active-up')){
             document.getElementById(directionUp).classList.remove('btn-active-up');
             var direction = "down";
@@ -93,9 +107,14 @@ var SQuestion = (function () {
             pointContainer.innerHTML= pointVal - 1;
         } else {
             document.getElementById(directionUp).classList.add('btn-active-up');
-            var direction = "up";
             var vote = "up";
-            pointContainer.innerHTML= pointVal + 1;
+            if(downButton.classList.contains('btn-active-down')){
+                var direction = "doubleUp";
+                pointContainer.innerHTML= pointVal + 2;
+            } else {
+                var direction = "up";
+                pointContainer.innerHTML= pointVal + 1;
+            }
         }
         document.getElementById(directionDown).classList.remove('btn-active-down');
 
@@ -109,7 +128,6 @@ var SQuestion = (function () {
                 "vote": vote
             }
         });
-
     };
 
     sQuestion.changeStateDown = function (id) {
@@ -119,6 +137,7 @@ var SQuestion = (function () {
         var pointContainer = document.getElementById(pointContainerId);
         var points = pointContainer.innerHTML;
         var pointVal =parseInt(points);
+        var upButton = document.getElementById(directionUp);
         var downButton = document.getElementById(directionDown);
         if(downButton.classList.contains('btn-active-down')){
             var direction = "up";
@@ -126,10 +145,15 @@ var SQuestion = (function () {
             document.getElementById(directionDown).classList.remove('btn-active-down');
             pointContainer.innerHTML= pointVal + 1;
         } else {
-            var direction = "down";
             var vote = "down";
             document.getElementById(directionDown).classList.add('btn-active-down');
-            pointContainer.innerHTML= pointVal - 1;
+            if(upButton.classList.contains('btn-active-up')){
+                var direction = "doubleDown";
+                pointContainer.innerHTML= pointVal - 2;
+            } else {
+                var direction = "down";
+                pointContainer.innerHTML= pointVal - 1;
+            }
         }
         document.getElementById(directionUp).classList.remove('btn-active-up');
 
@@ -143,7 +167,6 @@ var SQuestion = (function () {
                 "vote": vote
             }
         });
-
     };
 
     sQuestion.changeStateUpAnswer = function (id) {
@@ -154,6 +177,7 @@ var SQuestion = (function () {
         var points = pointContainer.innerHTML;
         var pointVal =parseInt(points);
         var upButton = document.getElementById(directionUp);
+        var downButton = document.getElementById(directionDown);
         if(upButton.classList.contains('btn-active-up')){
             document.getElementById(directionUp).classList.remove('btn-active-up');
             var direction = "down";
@@ -161,9 +185,14 @@ var SQuestion = (function () {
             pointContainer.innerHTML= pointVal - 1;
         } else {
             document.getElementById(directionUp).classList.add('btn-active-up');
-            var direction = "up";
             var vote = "up";
-            pointContainer.innerHTML= pointVal + 1;
+            if(downButton.classList.contains('btn-active-down')){
+                var direction = "doubleUp";
+                pointContainer.innerHTML= pointVal + 2;
+            } else {
+                var direction = "up";
+                pointContainer.innerHTML= pointVal + 1;
+            }
         }
         document.getElementById(directionDown).classList.remove('btn-active-down');
 
@@ -177,7 +206,6 @@ var SQuestion = (function () {
                 "vote": vote
             }
         });
-
     };
 
     sQuestion.changeStateDownAnswer = function (id) {
@@ -187,6 +215,7 @@ var SQuestion = (function () {
         var pointContainer = document.getElementById(pointContainerId);
         var points = pointContainer.innerHTML;
         var pointVal =parseInt(points);
+        var upButton = document.getElementById(directionUp);
         var downButton = document.getElementById(directionDown);
         if(downButton.classList.contains('btn-active-down')){
             var direction = "up";
@@ -194,10 +223,15 @@ var SQuestion = (function () {
             document.getElementById(directionDown).classList.remove('btn-active-down');
             pointContainer.innerHTML= pointVal + 1;
         } else {
-            var direction = "down";
             var vote = "down";
             document.getElementById(directionDown).classList.add('btn-active-down');
-            pointContainer.innerHTML= pointVal - 1;
+            if(upButton.classList.contains('btn-active-up')){
+                var direction = "doubleDown";
+                pointContainer.innerHTML= pointVal - 2;
+            } else {
+                var direction = "down";
+                pointContainer.innerHTML= pointVal - 1;
+            }
         }
         document.getElementById(directionUp).classList.remove('btn-active-up');
 
@@ -211,7 +245,6 @@ var SQuestion = (function () {
                 "vote": vote
             }
         });
-
     };
 
     sQuestion.verifyAnswer = function (id) {
@@ -264,6 +297,35 @@ var SQuestion = (function () {
             data: {
                 "id": id,
                 "correct": correct
+            }
+        });
+    };
+
+    sQuestion.updateUnderstood = function (id) {
+        var underStandBtnId = "underStand" + id;
+        var underStandBtn = document.getElementById(underStandBtnId);
+        var understood = 0;
+        if (underStandBtn.classList.contains('unVerified')) {
+            understood = 1;
+            underStandBtn.classList.remove('unVerified');
+            underStandBtn.classList.add('verified');
+            underStandBtn.classList.remove('fa-square-o');
+            underStandBtn.classList.add('fa-check-square');
+        } else {
+            understood = 0;
+            underStandBtn.classList.remove('verified');
+            underStandBtn.classList.add('unVerified');
+            underStandBtn.classList.remove('fa-check-square');
+            underStandBtn.classList.add('fa-square-o');
+        }
+
+        var sessionId = $("#sess").val();
+        $.ajax({
+            type: 'POST',
+            url: "actions/updateUnderstood.php?PHPSESSID=" + sessionId,
+            data: {
+                "id": id,
+                "understood": understood
             }
         });
     };

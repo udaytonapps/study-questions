@@ -71,8 +71,6 @@ body {
     color: gray;
 }
 
-
-
 .btn-active-up{
     background: none;
     border: none;
@@ -170,6 +168,86 @@ body {
     font-size: 2em;
 }
 
+.verifiedTextQuestion{
+    text-align: center;
+    color: white;
+    background-color: green;
+    width: 70px;
+    border-radius: 10px;
+}
+
+.verifiedTextAnswer{
+    text-align: center;
+    color: white;
+    background-color: green;
+    width: 70px;
+    border-radius: 10px;
+    margin-left: -65px;
+}
+
+
 .spaceAbove{
     margin-top: 1em;
+}
+
+.spaceAbove3{
+    margin-top: 3em;
+}
+
+.viewQuestionHeaders{
+    margin-top: 0 !important;
+    color: darkblue;
+    font-weight: bold;
+}
+
+.hider{
+    display: none;
+}
+
+.showthis{
+    display: block;
+}
+
+.mainPageGotThis{
+    cursor: default;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.sizeUp{
+    font-size: 2em !important;
+}
+
+.compressed{
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.hideAnswer{
+    background: lightgray;
+    cursor: pointer;
+    height: 8em;
+}
+
+.answerBlock{
+    height: auto;
+}
+
+.answertext{
+    overflow: auto;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+.adjuster{
+    padding-top: 3px;
+}
+
+.questionText{
+    margin-top: 15px !important;
+    margin-bottom: 0 !important;
+}
+
+.noMargins{
+    margin: 0 !important;
 }
