@@ -107,24 +107,69 @@ body {
     color: red;
 }
 
-.pointsPlace{
-    margin-left: 7px !important;
+.pointsPlace1100{
+    margin-left: 10px !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
-.negativePointsPlace{
+
+.pointsPlace936{
+    margin-left: 18px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.pointsPlace701{
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+/*1000 0 936 13 >701 -6 */
+.negativePointsPlace1100{
     margin-left: 0px !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
 
-.pointsPlaceViewQuestion{
-    margin-left: 3px !important;
+.negativePointsPlace936{
+    margin-left: 13px !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
-.negativePointsPlaceViewQuestion{
-    margin-left: -4px !important;
+
+.negativePointsPlace701{
+    margin-left: -6px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.pointsPlaceViewQuestion1100{
+    margin-left: 2px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.pointsPlaceViewQuestion936{
+margin-left: 15px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.pointsPlaceViewQuestion701{
+margin-left: 0px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.negativePointsPlaceViewQuestion1100{
+    margin-left: -5px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.negativePointsPlaceViewQuestion936{
+margin-left: 7px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.negativePointsPlaceViewQuestion701{
+margin-left: -7px !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }
@@ -210,12 +255,10 @@ body {
 
 .mainPageGotThis{
     cursor: default;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
 }
 
 .sizeUp{
-    font-size: 2em !important;
+    font-size: 1.5em !important;
 }
 
 .compressed{
@@ -226,11 +269,15 @@ body {
 .hideAnswer{
     background: lightgray;
     cursor: pointer;
-    height: 8em;
+    min-height: 8em;
 }
 
 .answerBlock{
     height: auto;
+}
+
+.questionText{
+    overflow: auto;
 }
 
 .answertext{
@@ -249,5 +296,10 @@ body {
 }
 
 .noMargins{
+    margin: 0 !important;
+}
+
+.instructorVerified{
+    padding: 5px!important;
     margin: 0 !important;
 }

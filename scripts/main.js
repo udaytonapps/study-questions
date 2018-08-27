@@ -84,6 +84,126 @@ function revealAnswers() {
     document.getElementById("addAnswerButton").classList.remove('hider');
 }
 
+function trimTitles(){
+    var cutter;
+    if($(window).width() > 1100){
+        cutter = 73;
+    } else if($(window).width() > 935){
+        cutter = 60;
+    } else if($(window).width() > 700){
+        cutter = 50;
+    } else {
+        cutter = 29
+    }
+    var texts = document.getElementsByClassName("questionText");
+    length = texts.length;
+    for (var i = 0; i < length; i++){
+
+        if(texts[i].innerHTML.length > cutter){
+            var string = texts[i].innerHTML.substring(0,cutter)+"...";
+            texts[i].innerHTML = string;
+        }
+    }
+}
+
+function allignVotes(){
+    var points1 = document.getElementsByClassName("pointsPlace701");
+    var points2 = document.getElementsByClassName("pointsPlace936");
+    var points3 = document.getElementsByClassName("pointsPlace1100");
+    var negPoints1 = document.getElementsByClassName("negativePointsPlace1100");
+    var negPoints2 = document.getElementsByClassName("negativePointsPlace936");
+    var negPoints3 = document.getElementsByClassName("negativePointsPlace701");
+    var points =[];
+    var negPoints=[];
+    if(points1.length > 0){
+        points = points1;
+    } else if(points2.length > 0){
+        points = points2;
+    } else if(points3.length > 0){
+        points = points3;
+    }
+
+    if(negPoints1.length > 0){
+        negPoints = negPoints1;
+    } else if(negPoints2.length > 0){
+        negPoints = negPoints2;
+    } else if(negPoints3.length > 0) {
+        negPoints = negPoints3;
+    }
+    var length = 0;
+    var negLength = 0;
+    if(points.length > 0) {
+        length = points.length;
+    }
+    if(negPoints.length > 0) {
+        negLength = negPoints.length;
+    }
+    if($(window).width() > 1100){
+        for (var i = 0; i < length; i++){
+            var x = points[0];
+            if(x.classList.contains("pointsPlace936")){
+                x.classList.remove("pointsPlace936");
+                x.classList.add("pointsPlace1100");
+            } else if (x.classList.contains("pointsPlace701")){
+                x.classList.remove("pointsPlace701");
+                x.classList.add("pointsPlace1100");
+            }
+        }
+        for (var i = 0; i < negLength; i++){
+            var x = negPoints[0];
+            if(x.classList.contains("negativePointsPlace936")){
+                x.classList.remove("negativePointsPlace936");
+                x.classList.add("negativePointsPlace1100");
+            } else if (x.classList.contains("negativePointsPlace701")){
+                x.classList.remove("negativePointsPlace701");
+                x.classList.add("negativePointsPlace1100");
+            }
+        }
+    } else if($(window).width() > 935) {
+        for (var i = 0; i < length; i++){
+            var x = points[0];
+            if(x.classList.contains("pointsPlace1100")){
+                x.classList.remove("pointsPlace1100");
+                x.classList.add("pointsPlace936");
+            } else if (x.classList.contains("pointsPlace701")){
+                x.classList.remove("pointsPlace701");
+                x.classList.add("pointsPlace936");
+            }
+        }
+        for (var i = 0; i < negLength; i++){
+            var x = negPoints[0];
+            if(x.classList.contains("negativePointsPlace1100")){
+                x.classList.remove("negativePointsPlace1100");
+                x.classList.add("negativePointsPlace936");
+            } else if (x.classList.contains("negativePointsPlace701")){
+                x.classList.remove("negativePointsPlace701");
+                x.classList.add("negativePointsPlace936");
+            }
+        }
+    } else {
+        for (var i = 0; i < length; i++){
+            var x = points[0];
+            if(x.classList.contains("pointsPlace1100")){
+                x.classList.remove("pointsPlace1100");
+                x.classList.add("pointsPlace701");
+            } else if (x.classList.contains("pointsPlace936")){
+                x.classList.remove("pointsPlace936");
+                x.classList.add("pointsPlace701");
+            }
+        }
+        for (var i = 0; i < negLength; i++){
+            var x = negPoints[0];
+            if(x.classList.contains("negativePointsPlace1100")){
+                x.classList.remove("negativePointsPlace1100");
+                x.classList.add("negativePointsPlace701");
+            } else if (x.classList.contains("negativePointsPlace936")){
+                x.classList.remove("negativePointsPlace936");
+                x.classList.add("negativePointsPlace701");
+            }
+        }
+    }
+}
+
 $("#hideAnswer").click(function () {
     var vidCon = document.getElementById("hideAnswer");
     $(vidCon).toggleClass("transition");
@@ -249,17 +369,23 @@ var SQuestion = (function () {
 
     sQuestion.verifyAnswer = function (id) {
         var verifyBtnId = "verify" + id;
+        var verifyBtntext = "verifiedTextQuestion" + id;
         var verifyBtn = document.getElementById(verifyBtnId);
+        var verifyBtnBlock = document.getElementById(verifyBtntext);
         var correct = 0;
         if (verifyBtn.classList.contains('unVerified')) {
             correct = 1;
             verifyBtn.classList.remove('unVerified');
             verifyBtn.classList.add('verified');
+            verifyBtnBlock.classList.remove('hider');
+            verifyBtnBlock.classList.add('showthis');
             document.getElementById(verifyBtnId).title = "Verified Answer";
         } else {
             correct = 0;
             verifyBtn.classList.remove('verified');
             verifyBtn.classList.add('unVerified');
+            verifyBtnBlock.classList.remove('showthis');
+            verifyBtnBlock.classList.add('hider');
             document.getElementById(verifyBtnId).title = "Unverified Answer";
         }
 
@@ -276,17 +402,23 @@ var SQuestion = (function () {
 
     sQuestion.verifyUserAnswer = function (id) {
         var verifyBtnId = "verifyAnswer" + id;
+        var verifyBtntext = "verifiedTextAnswer" + id;
         var verifyBtn = document.getElementById(verifyBtnId);
+        var verifyBtnBlock = document.getElementById(verifyBtntext);
         var correct = 0;
         if (verifyBtn.classList.contains('unVerified')) {
             correct = 1;
             verifyBtn.classList.remove('unVerified');
             verifyBtn.classList.add('verified');
+            verifyBtnBlock.classList.remove('hider');
+            verifyBtnBlock.classList.add('showthis');
             document.getElementById(verifyBtnId).title = "Verified Answer";
         } else {
             correct = 0;
             verifyBtn.classList.remove('verified');
             verifyBtn.classList.add('unVerified');
+            verifyBtnBlock.classList.remove('showthis');
+            verifyBtnBlock.classList.add('hider');
             document.getElementById(verifyBtnId).title = "Unverified Answer";
         }
 
