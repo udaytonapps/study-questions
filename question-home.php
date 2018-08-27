@@ -81,23 +81,22 @@ echo('
         }
         echo('  
         <a href="#addQuestion" data-toggle="modal" class="btn btn-success small-shadow"><span class="fa fa-plus"></span> Add Question</a>
-    </div>');
+    </div>
 
-    echo('</div>
     <div class="col-sm-11 col-sm-offset-1 text-left "> 
         <div class="modal fade" id="addQuestion" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Question and Answer</h4>
+                        <h3 class="modal-title">Add Question and Answer</h3>
                     </div>
                     <form method="post" id="addQuestionForm" action="actions/addstudyquestion.php">
                         <div class="modal-body">
                             <input type="hidden" name="questionId" id="questionId" value="-1">
                             <input type="hidden" name="username" id="username" value="' . $name . '">
-                            <label for="questionText">Question Text</label>
+                            <label for="questionText">Question:</label>
                             <textarea class="form-control" name="questionText" id="questionText" rows="4" autofocus required></textarea>
-                            <label for="answerText" class="spaceAbove">Answer Text</label>
+                            <label for="answerText" class="spaceAbove">Answer:</label>
                             <textarea class="form-control" name="answerText" id="answerText" rows="4" autofocus required></textarea>
                         </div>
                         <div class="modal-footer">
@@ -109,7 +108,7 @@ echo('
             </div>
         </div>
     </div>
-</div>
+
 ');
 
 echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
@@ -126,7 +125,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
         $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
         echo('<div class="list-group-item">
                 <div class="row">
-                    <div class="col-sm-1 text-center">
+                    <div class="col-sm-1 text-center pull-left">
                         <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
                         <button id="upVote' . $question_id . '"  ');
                             if ($previousVote["vote"] === "up") {
@@ -138,9 +137,9 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                             <span class="fa fa-arrow-up"></span>
                         </button>');
                         if($question["votes"] < 0){
-                            echo ('<h4 class="negativePointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                            echo ('<h4 class="negativePointsPlace1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                         } else {
-                            echo('<h4 class="pointsPlace" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                            echo('<h4 class="pointsPlace1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                         }
                         echo ('<button id="downVote' . $question_id . '"');
                             if ($previousVote["vote"] === "down") {
@@ -155,23 +154,20 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                     <div class="col-sm-11">');
                         $dateTime = new DateTime($question["modified"]);
                         $date = date_format($dateTime, "n/j/y");
-                        $time = date_format($dateTime, "g:iA");
-                        $question_text = substr($question["question_txt"],0,55);
-                        if(strlen( $question["question_txt"] ) > 55){
+                        $time = date_format($dateTime, "g:i A");
+                        $question_text = substr($question["question_txt"],0,73);
+                        if(strlen( $question["question_txt"] ) > 63){
                             $question_text = $question_text."...";
                         }
                         echo('
+                    <div class="row">
                         <form method="post"  action="actions/viewQuestionForm.php" name="viewQuestionForm' . $i . '">
                             <input type="hidden" name="viewQuestionId" value="' . $question_id . '"/>
                         </form>
-                            <a href="#"   data-toggle="modal" onclick="viewQuestionForm' . $i . '.submit()">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <h4 class="">' . $question_text . '</h4>
-                                    </div>
-                                    <div class="col-sm-2">
+                        <a href="#"   data-toggle="modal" onclick="viewQuestionForm' . $i . '.submit()">
+                            <div class="row">
+                                <div class="col-sm-1 pull-right">
                                     ');
-
                                         $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
                                         if($verifiedAnswer["understood"]){
                                             echo('<button title="Understood" id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square pull-right verifier verified mainPageGotThis disabled">');
@@ -180,15 +176,17 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                                         }
                                         echo('</button>');
                                 echo ('</div>
-                                </div>
-                            </a>');
-
-                            echo ('
-                            <div class="row">
-                                <div class="col-sm-12 noMargins">
-                                    <h5 class="noMargins">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</h5>
+                                <div class="col-sm-11">
+                                    <h4 class="questionText">' . $question_text . '</h4>
                                 </div>
                             </div>
+                        </a>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-9 col-sm-offset-1 noMargins">
+                                <h5 class="noMargins">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -201,5 +199,15 @@ $OUTPUT->footerStart();
 ?>
     <!-- Our main javascript file for tool functions -->
     <script src="scripts/main.js" type="text/javascript"></script>
+    <script>
+        $( document ).ready(function() {
+            trimTitles();
+        });
+    </script>
+    <script>
+        $(window).on('resize', function() {
+            allignVotes();
+        });
+    </script>
 <?php
 $OUTPUT->footerEnd();

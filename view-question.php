@@ -80,32 +80,33 @@ echo('<div class="container-fluid">
     $question_id = $question["question_id"];
     $dateTime = new DateTime($question["modified"]);
     $date = date_format($dateTime, "n/j/y");
-    $time = date_format($dateTime, "g:iA");
+    $time = date_format($dateTime, "g:i A");
     $answerId = -1;
     $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
     $verified = $SQ_DAO->getVerified($question_id);
 
     echo('
 
-    <div class="col-sm-7 col-sm-offset-1 text-left">
-        <h4>' . $questionName . ' - ' . $date . ' - ' . $time . '</h4>
-    </div>
-    <div class="col-sm-3 text-right">
+    <div class="col-sm-10 col-sm-offset-1 text-left">
+    <div class="pull-right">
     ');
-        $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
-        if($verifiedAnswer["understood"]){
-            echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square verifier verified"onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
-        } else {
-            echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-square-o verifier unVerified" onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
-        }
-        echo('
-        </button>
-        <span class="sizeUp">Got It!</span>
+            $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
+            if($verifiedAnswer["understood"]){
+                echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square verifier verified"onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
+            } else {
+                echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-square-o verifier unVerified" onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
+            }
+            echo('
+            </button>
+            <span class="sizeUp">Got It!</span>
+        </div>
+        <h4>' . $questionName . ' - ' . $date . ' - ' . $time . '</h4>
+        
     </div>
     <div class="col-sm-10 col-sm-offset-1">
         <div class="list-group-item">
             <div class="row">
-                <div class="col-sm-1 text-center">
+                <div class="col-sm-1 text-center pull-left">
                     <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
                     <button id="upVote' . $question_id . '" ');
                         if($previousVote["vote"] === "up"){
@@ -117,9 +118,9 @@ echo('<div class="container-fluid">
                         <span class="fa fa-arrow-up"></span>
                     </button>');
                     if($question["votes"] < 0){
-                        echo ('<h3 class="negativePointsPlaceViewQuestion" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                        echo ('<h3 class="negativePointsPlaceViewQuestion1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                     } else {
-                        echo ('<h3 class="pointsPlaceViewQuestion" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
+                        echo ('<h3 class="pointsPlaceViewQuestion1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                     }
                     echo ('<button id="downVote' . $question_id . '"');
                         if($previousVote["vote"] === "down"){
@@ -181,9 +182,9 @@ echo('<div class="container-fluid">
         echo ('
         <div id = "hideAnswer" class="list-group-item text-center showthis hideAnswer" onclick="revealAnswers()">');
         if(count($answers) > 0) {
-            echo (' <h1>Click to Reveal Answers</h1> ');
+            echo (' <h2>Click to Reveal Answers</h2> ');
         }else{
-            echo (' <h1>Click to Reveal Answer</h1> ');
+            echo (' <h2>Click to Reveal Answer</h2> ');
         }
         echo ('
         </div>
@@ -191,40 +192,57 @@ echo('<div class="container-fluid">
     } else {
         echo ('<div class="showthis">');
     }
-    $_SESSION["show"] = false;
+
     echo ('
     <div class="list-group-item answerBlock">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
-                <h4 class="viewQuestionHeaders">Answer:</h4>
-            </div>
-            <div class="col-sm-1">
-                <button id="verify' . $question_id . '" ');
-                    if($verified["correct"]){
-                        echo('title="Verified Answer" class="btn-icon fa fa-3x fa-check-circle-o pull-right verifier verified"');
-                    } else {
-                        echo('title="Unverified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier unVerified"');
-                    }
-                    if ($USER->instructor){
-                        echo(' onclick="SQuestion.verifyAnswer(' . $question_id . ')"');
-                    } else {
-                        echo('disabled');
-                    }
-                echo(' ></button>
-            </div>
-            <div class="col-sm-9  col-sm-offset-1 answertext">
+            <div class="row">
+            <div class="col-sm-11 answertext">
+                    <h4 class="viewQuestionHeaders">Answer:</h4>
+                </div>
+                
+                <div class="col-sm-11 answertext">
                     <h4>'.$question["answer_txt"].'</h4>
+                </div>
+                </div>
             </div>
-            <div class="col-sm-2" style="padding-right: 8px !important;">
-      ');
+            <div class="col-sm-1 pull-right">
+                <div class="row">
+                <div class="col-sm-12">
+                   ');
+
+                        if ($USER->instructor){
+                            if($verified["correct"]){
+                                echo(' <button id="verify' . $question_id . '" title="Verified Answer" class="btn-icon fa fa-3x fa-check-circle-o pull-right verifier verified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ></button>');
+                            } else {
+                                echo(' <button id="verify' . $question_id . '" title="Unverified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier unVerified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ></button>');
+                            }
+                        } else {
+                            if($verified["correct"]){
+                                echo(' <button id="verify' . $question_id . '" title="Verified Answer" class="btn-icon fa fa-3x fa-check-circle-o pull-right verifier verified" disabled ></button>');
+                            }
+                        }
+                    echo('
+                </div>
+                <div class="col-sm-12" style="padding-right: 8px !important;">');
                     if($verified["correct"]){
                         echo('
-                        <div class="verifiedTextQuestion pull-right">
-                        <p class="noMargins">Instructor Verified</p>
+                        <div id="verifiedTextQuestion' . $question_id . '" class="verifiedTextQuestion pull-right showthis">
+                            <p class="instructorVerified">Instructor Verified</p>
+                        </div>');
+                    } else {
+                        echo('
+                        <div id="verifiedTextQuestion' . $question_id . '" class="verifiedTextQuestion pull-right hider">
+                            <p class="instructorVerified">Instructor Verified</p>
                         </div>');
                     }
-echo('
+            echo('
+                </div>
+                </div>
             </div>
+            
+            
         </div>   
     </div> ');
 
@@ -240,16 +258,17 @@ echo('
         $i++;
         $dateTime = new DateTime($answer["modified"]);
         $date = date_format($dateTime, "n/j/y");
-        $time = date_format($dateTime, "g:iA");
+        $time = date_format($dateTime, "g:i A");
         echo('<div class="col-sm-12">');
             $answer_id = $answer["answer_id"];
         echo('<div class="list-group-item">
                 <div class="row">
                     <div class="col-sm-10">
-                        <h4>'.$answer["answer_txt"].'</h4>
+                    <p>'.$answer["author"].' - ' . $date . ' - ' . $time . '</p>
+                        
                         <div class="row">
-                            <div class="col-sm-12 text-right">
-                                <p>'.$answer["author"].' - ' . $date . ' - ' . $time . '</p>
+                            <div class="col-sm-11 col-sm-offset-1">
+                                <h4>'.$answer["answer_txt"].'</h4>
                             </div>
                         </div>
                     </div>
@@ -288,28 +307,31 @@ echo('
                             </div>
                         </div>');
                     }
-                echo('
-                <button id="verifyAnswer' . $answer_id . '"  ');
                         $verifiedAnswer = $SQ_DAO->getAnswerVerified($answer_id);
-                        if($verifiedAnswer["correct"]){
-                            echo('title="Verified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier verified"');
-                        } else {
-                            echo('title="Unverified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier unVerified"');
-                        }
                         if ($USER->instructor){
-                            echo(' onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')"');
+                            if($verifiedAnswer["correct"]){
+                                echo('<button id="verifyAnswer' . $answer_id . '" title="Verified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier verified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')"></button>');
+                            } else {
+                                echo('<button id="verifyAnswer' . $answer_id . '" title="Unverified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier unVerified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')"></button>');
+                            }
                         } else {
-                            echo('disabled');
+                            if($verifiedAnswer["correct"]){
+                                echo('<button id="verifyAnswer' . $answer_id . '" title="Verified Answer" class="btn-icon fa fa-check-circle-o pull-right verifier verified" disabled></button>');
+                            }
                         }
-                    echo('>
-                    </button>
+                    echo('
                     </div>
                     </div>
                         <div class="row"><div class="col-sm-2 pull-right">');
                             if($verifiedAnswer["correct"]){
                                 echo('
-                                    <div class="verifiedTextAnswer">
-                                    <p class="noMargins">Instructor Verified</p>
+                                    <div id="verifiedTextAnswer' . $answer_id . '"  class="verifiedTextAnswer showthis">
+                                        <p class="instructorVerified">Instructor Verified</p>
+                                    </div>');
+                            } else {
+                                echo('
+                                    <div id="verifiedTextAnswer' . $answer_id . '"  class="verifiedTextAnswer hider">
+                                        <p class="instructorVerified">Instructor Verified</p>
                                     </div>');
                             }echo('
                         </div></div>
@@ -319,7 +341,7 @@ echo('
         </div>
         ');
     }
-    echo('
+                echo('
                     <div id="addAnswer" style="display:none;" class="col-sm-12 text-left spaceAbove ">
                         <div class="list-group-item" >
                             <div class="row">
@@ -344,17 +366,118 @@ echo('
                     </div>
                 </div>
                 <div class="col-sm-12 text-left spaceAbove ">
-                    <a href="#" onclick="toggleAddAnswer();" id ="addAnswerButton" class="btn btn-success small-shadow'); if(!$_SESSION["show"]){echo ('hider'); } echo('"><span class="fa fa-plus"></span> Add Answer</a>
+                    <a href="#" onclick="toggleAddAnswer();" id ="addAnswerButton" class="btn btn-success small-shadow'); if(!$_SESSION["show"]){echo (' hider'); } echo('"><span class="fa fa-plus"></span> Add Answer</a>
                     <a href="question-home.php"  class="btn btn-info small-shadow pull-right">Back</a>
                 </div>
             </div>
         </div>
     </div>
 </div>');
-
+$_SESSION["show"] = false;
 $OUTPUT->footerStart();
 ?>
     <!-- Our main javascript file for tool functions -->
     <script src="scripts/main.js" type="text/javascript"></script>
+    <script>
+        $(window).on('resize', function() {
+
+            var points1 = document.getElementsByClassName("pointsPlaceViewQuestion701");
+            var points2 = document.getElementsByClassName("pointsPlaceViewQuestion936");
+            var points3 = document.getElementsByClassName("pointsPlaceViewQuestion1100");
+            var negPoints1 = document.getElementsByClassName("negativePointsPlaceViewQuestion1100");
+            var negPoints2 = document.getElementsByClassName("negativePointsPlaceViewQuestion936");
+            var negPoints3 = document.getElementsByClassName("negativePointsPlaceViewQuestion701");
+            var points =[];
+            var negPoints=[];
+            if(points1.length > 0){
+                points = points1;
+            } else if(points2.length > 0){
+                points = points2;
+            } else if(points3.length > 0){
+                points = points3;
+            }
+            if(negPoints1.length > 0){
+                negPoints = negPoints1;
+            } else if(negPoints2.length > 0){
+                negPoints = negPoints2;
+            } else if(negPoints3.length > 0){
+                negPoints = negPoints3;
+            }
+
+            var length = 0;
+            var negLength = 0;
+            if(points.length > 0) {
+                length = points.length;
+            }
+            if(negPoints.length > 0) {
+                negLength = negPoints.length;
+            }
+
+            if($(window).width() > 1100){
+                for (var i = 0; i < length; i++){
+                    var x = points[0];
+                    if(x.classList.contains("pointsPlaceViewQuestion936")){
+                        x.classList.remove("pointsPlaceViewQuestion936");
+                        x.classList.add("pointsPlaceViewQuestion1100");
+                    } else if (x.classList.contains("pointsPlaceViewQuestion701")){
+                        x.classList.remove("pointsPlaceViewQuestion701");
+                        x.classList.add("pointsPlaceViewQuestion1100");
+                    }
+                }
+                for (var i = 0; i < negLength; i++){
+                    var x = negPoints[0];
+                    if(x.classList.contains("negativePointsPlaceViewQuestion936")){
+                        x.classList.remove("negativePointsPlaceViewQuestion936");
+                        x.classList.add("negativePointsPlaceViewQuestion1100");
+                    } else if (x.classList.contains("negativePointsPlaceViewQuestion701")){
+                        x.classList.remove("negativePointsPlaceViewQuestion701");
+                        x.classList.add("negativePointsPlaceViewQuestion1100");
+                    }
+                }
+            } else if($(window).width() > 935) {
+                for (var i = 0; i < length; i++){
+                    var x = points[0];
+                    if(x.classList.contains("pointsPlaceViewQuestion1100")){
+                        x.classList.remove("pointsPlaceViewQuestion1100");
+                        x.classList.add("pointsPlaceViewQuestion936");
+                    } else if (x.classList.contains("pointsPlaceViewQuestion701")){
+                        x.classList.remove("pointsPlaceViewQuestion701");
+                        x.classList.add("pointsPlaceViewQuestion936");
+                    }
+                }
+                for (var i = 0; i < negLength; i++){
+                    var x = negPoints[0];
+                    if(x.classList.contains("negativePointsPlaceViewQuestion1100")){
+                        x.classList.remove("negativePointsPlaceViewQuestion1100");
+                        x.classList.add("negativePointsPlaceViewQuestion936");
+                    } else if (x.classList.contains("negativePointsPlaceViewQuestion701")){
+                        x.classList.remove("negativePointsPlaceViewQuestion701");
+                        x.classList.add("negativePointsPlaceViewQuestion936");
+                    }
+                }
+            } else {
+                for (var i = 0; i < length; i++){
+                    var x = points[0];
+                    if(x.classList.contains("pointsPlaceViewQuestion1100")){
+                        x.classList.remove("pointsPlaceViewQuestion1100");
+                        x.classList.add("pointsPlaceViewQuestion701");
+                    } else if (x.classList.contains("pointsPlaceViewQuestion936")){
+                        x.classList.remove("pointsPlaceViewQuestion936");
+                        x.classList.add("pointsPlaceViewQuestion701");
+                    }
+                }
+                for (var i = 0; i < negLength; i++){
+                    var x = negPoints[0];
+                    if(x.classList.contains("negativePointsPlaceViewQuestion1100")){
+                        x.classList.remove("negativePointsPlaceViewQuestion1100");
+                        x.classList.add("negativePointsPlaceViewQuestion701");
+                    } else if (x.classList.contains("negativePointsPlaceViewQuestion936")){
+                        x.classList.remove("negativePointsPlaceViewQuestion936");
+                        x.classList.add("negativePointsPlaceViewQuestion701");
+                    }
+                }
+            }
+        });
+    </script>
 <?php
 $OUTPUT->footerEnd();
