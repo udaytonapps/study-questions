@@ -115,6 +115,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
     echo('<p>Click on the cards below to respond to study questions and view answers</p>
     <div class="row">');
     $i = 0;
+    $x = 0;
     foreach ($questions as $question) {
         $i++;
         $up = "up";
@@ -123,7 +124,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
         $question_id = $question["question_id"];
         $answerId = -1;
         $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
-        echo('<div class="list-group-item">
+        echo('<div class="list-group-item rowShrinker">
                 <div class="row">
                     <div class="col-sm-1 text-center pull-left">
                         <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
@@ -177,20 +178,22 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                                         echo('</button>');
                                 echo ('</div>
                                 <div class="col-sm-11">
-                                    <h4 class="questionText">' . $question_text . '</h4>
+                                    <p class="hider" name="questionId" id="questionId' . $x . '">' . $question_text . '</p>
+                                    <h5 class="questionText">' . $question_text . '</h5>
+                                    <div class="row">
+                                        <div class="col-sm-10 submittedText">
+                                            <p class="noMargins">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </a>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-9 col-sm-offset-1 noMargins">
-                                <h5 class="noMargins">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</h5>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
     </div>');
+    $x++;
     }
 echo('</div>');
 
@@ -199,11 +202,6 @@ $OUTPUT->footerStart();
 ?>
     <!-- Our main javascript file for tool functions -->
     <script src="scripts/main.js" type="text/javascript"></script>
-    <script>
-        $( document ).ready(function() {
-            trimTitles();
-        });
-    </script>
     <script>
         $(window).on('resize', function() {
             allignVotes();
