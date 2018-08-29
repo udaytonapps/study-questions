@@ -84,28 +84,6 @@ function revealAnswers() {
     document.getElementById("addAnswerButton").classList.remove('hider');
 }
 
-function trimTitles(){
-    var cutter;
-    if($(window).width() > 1100){
-        cutter = 73;
-    } else if($(window).width() > 935){
-        cutter = 60;
-    } else if($(window).width() > 700){
-        cutter = 50;
-    } else {
-        cutter = 29
-    }
-    var texts = document.getElementsByClassName("questionText");
-    length = texts.length;
-    for (var i = 0; i < length; i++){
-
-        if(texts[i].innerHTML.length > cutter){
-            var string = texts[i].innerHTML.substring(0,cutter)+"...";
-            texts[i].innerHTML = string;
-        }
-    }
-}
-
 function allignVotes(){
     var points1 = document.getElementsByClassName("pointsPlace701");
     var points2 = document.getElementsByClassName("pointsPlace936");
@@ -138,6 +116,34 @@ function allignVotes(){
     if(negPoints.length > 0) {
         negLength = negPoints.length;
     }
+
+    var cutter;
+    if($(window).width() > 1100){
+        cutter = 73;
+    } else if($(window).width() > 935){
+        cutter = 60;
+    } else if($(window).width() > 700){
+        cutter = 50;
+    } else if($(window).width() > 500){
+        cutter = 29;
+    } else {
+        cutter = 12;
+    }
+
+    var texts = document.getElementsByClassName("questionText");
+    var textsLength = texts.length;
+    console.log(textsLength);
+    for (var y = 0; y < textsLength; y++){
+        console.log(y);
+        var id = "questionId" + y;
+        var getText = document.getElementById(id);
+        console.log(getText.innerHTML);
+        if(getText.innerHTML.length > cutter){
+            var string = getText.innerHTML.substring(0,cutter)+"...";
+            texts[y].innerHTML = string;
+        }
+    }
+
     if($(window).width() > 1100){
         for (var i = 0; i < length; i++){
             var x = points[0];
