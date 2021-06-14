@@ -15,7 +15,7 @@ class SQ_DAO{
         $query = "SELECT skip_splash FROM {$this->p}sq_splash WHERE user_id = :userId";
         $arr = array(':userId' => $user_id);
         $context = $this->PDOX->rowDie($query, $arr);
-        return ($context["skip_splash"]);
+        return ($context && $context["skip_splash"]);
     }
 
     function toggleSkipSplash($user_id) {
