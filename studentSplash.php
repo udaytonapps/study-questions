@@ -30,9 +30,13 @@ echo ('
 
         <div class="row">
             <div class="col-sm-6 col-sm-offset-1" id="splashMessage">
-
-                <h1 class="fadeIn">Study Questions</h1>
-
+');
+if ("Study Questions" !== $toolTitle) {
+    echo '<h1 class="fadeIn"><small style="color:#fff;">Study Questions</small><br>'.$toolTitle.'</h1>';
+} else {
+    echo '<h1 class="fadeIn">Study Questions</h1>';
+}
+echo('
                 <p class="fadeIn ">
                     You must add a question/answer before you can see questions/answers submitted by others.
                 </p>

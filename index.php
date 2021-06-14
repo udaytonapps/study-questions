@@ -21,10 +21,7 @@ if ( $USER->instructor ) {
     $hasQuestions = $SQ_DAO->getQuestions($_SESSION["sq_id"]);
 
     if (!$hasQuestions) {
-        $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
-        $currentTime = $currentTime->format("Y-m-d H:i:s");
         $skipSplash = $SQ_DAO->skipSplash($USER->id);
-        header('Location: '.addSession('splash.php'));
         if ($skipSplash) {
              header( 'Location: '.addSession('question-home.php') ) ;
         } else {

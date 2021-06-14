@@ -15,6 +15,8 @@ $SQ_DAO = new SQ_DAO($PDOX, $p);
 // Retrieve the launch data if present
 $LTI = LTIX::requireData();
 
+include("menu.php");
+
 // Start of the output
 $OUTPUT->header();
 ?>
@@ -29,38 +31,7 @@ $question = $SQ_DAO->getQuestionById($_SESSION["questionId"]);
 
 $toolTitle = $SQ_DAO->getMainTitle($_SESSION["sq_id"]);
 
-if ($USER->instructor) {
-    echo('
-    <div id="sideNav" class="side-nav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span class="fa fa-times"></span></a>
-        <a href="splash.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Getting Started</a>
-        <a href="question-home.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Questions </a>
-    </div>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="javascript:void(0);" onclick="openSideNav();"><span class="fa fa-bars"></span> Menu</a>
-            </div>
-        </div>
-    </nav>
-');
-} else {
-    echo('
-    <div id="sideNav" class="side-nav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span class="fa fa-times"></span></a>
-        <a href="question-home.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Questions </a>
-    </div>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="javascript:void(0);" onclick="openSideNav();"><span class="fa fa-bars"></span> Menu</a>
-            </div>
-        </div>
-    </nav>
-');
-}
+$OUTPUT->topNav($menu);
 
 $name =$SQ_DAO->findDisplayName($USER->id);
 

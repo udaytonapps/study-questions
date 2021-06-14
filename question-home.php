@@ -15,6 +15,8 @@ $SQ_DAO = new SQ_DAO($PDOX, $p);
 // Retrieve the launch data if present
 $LTI = LTIX::requireData();
 
+include("menu.php");
+
 // Start of the output
 $OUTPUT->header();
 ?>
@@ -23,51 +25,15 @@ $OUTPUT->header();
 <?php
 $OUTPUT->bodyStart();
 
-//include("menu.php");
+$OUTPUT->topNav($menu);
+
 $questions = $SQ_DAO->getQuestions($_SESSION["sq_id"]);
 
 $toolTitle = $SQ_DAO->getMainTitle($_SESSION["sq_id"]);
 
 if ($toolTitle ==""){$toolTitle = "Study Questions";}
 
-if ($USER->instructor) {
-    $_SESSION["show"] = true;
-    echo('
-
-    <div id="sideNav" class="side-nav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span class="fa fa-times"></span></a>
-        <a href="splash.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Getting Started</a>
-        <a href="question-home.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Questions </a>
-        <a href="javascript:void(0);" id="editTitleLink"><span class="fa fa-fw fa-pencil" aria-hidden="true"></span> Edit Tool Title</a>
-        <a href="actions/DeleteAll.php" onclick="return confirmResetTool();"><span class="fa fa-fw fa-trash" aria-hidden="true"></span> Reset Tool</a>
-    </div>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="javascript:void(0);" onclick="openSideNav();"><span class="fa fa-bars"></span> Menu</a>
-            </div>
-        </div>
-    </nav>
-');
-} else {
-    $_SESSION["show"] = false;
-echo('
-
-    <div id="sideNav" class="side-nav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><span class="fa fa-times"></span></a>
-        <a href="question-home.php"><span class="fa fa-fw fa-pencil-square" aria-hidden="true"></span> Questions </a>
-    </div>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="javascript:void(0);" onclick="openSideNav();"><span class="fa fa-bars"></span> Menu</a>
-            </div>
-        </div>
-    </nav>
-');
-}
+$_SESSION["show"] = $USER->instructor;
 
 $name =$SQ_DAO->findDisplayName($USER->id);
 echo(' 
