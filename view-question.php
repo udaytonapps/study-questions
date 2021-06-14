@@ -91,7 +91,7 @@ echo('<div class="container-fluid">
     <div class="pull-right">
     ');
             $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
-            if($verifiedAnswer["understood"]){
+            if($verifiedAnswer && $verifiedAnswer["understood"]){
                 echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square verifier verified"onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
             } else {
                 echo('<button id="underStand' . $question_id . '"  class="btn-icon fa fa-square-o verifier unVerified" onclick="SQuestion.updateUnderstood(' . $question_id . ')">');
@@ -109,7 +109,7 @@ echo('<div class="container-fluid">
                 <div class="col-sm-1 text-center pull-left">
                     <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
                     <button id="upVote' . $question_id . '" ');
-                        if($previousVote["vote"] === "up"){
+                        if($previousVote && $previousVote["vote"] === "up"){
                             echo('class="btn btn-icon btn-active-up compressed"');
                         } else {
                             echo('class="btn btn-icon compressed"');
@@ -123,7 +123,7 @@ echo('<div class="container-fluid">
                         echo ('<h3 class="pointsPlaceViewQuestion1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                     }
                     echo ('<button id="downVote' . $question_id . '"');
-                        if($previousVote["vote"] === "down"){
+                        if($previousVote && $previousVote["vote"] === "down"){
                             echo('class="btn btn-icon btn-active-down compressed"');
                         } else {
                             echo('class="btn btn-icon compressed"');
