@@ -51,7 +51,7 @@ class SQ_DAO{
     function getMainTitle($sq_id) {
         $query = "SELECT title FROM {$this->p}sq_main WHERE sq_id = :sqId";
         $arr = array(':sqId' => $sq_id);
-        $title = $this->PDOX->rowDie($query, $arr)["title"];
+        $title = $this->PDOX->rowDie($query, $arr);
         return $title ? $title["title"] : "Study Questions";
     }
 
