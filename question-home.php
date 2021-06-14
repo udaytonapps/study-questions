@@ -129,7 +129,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                     <div class="col-sm-1 text-center pull-left">
                         <input type="hidden" id="sess" value="' . $_GET["PHPSESSID"] . '">
                         <button id="upVote' . $question_id . '"  ');
-                            if ($previousVote["vote"] === "up") {
+                            if ($previousVote && $previousVote["vote"] === "up") {
                                 echo('class="btn btn-active-up btn-icon compressed"');
                             } else {
                                 echo('class="btn btn-icon compressed"');
@@ -143,7 +143,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                             echo('<h4 class="pointsPlace1100" id="points' . $question_id . '">' . $question["votes"] . '</h3>');
                         }
                         echo ('<button id="downVote' . $question_id . '"');
-                            if ($previousVote["vote"] === "down") {
+                            if ($previousVote && $previousVote["vote"] === "down") {
                                 echo('class="btn btn-icon btn-active-down compressed"');
                             } else {
                                 echo('class="btn btn-icon compressed"');
@@ -170,7 +170,7 @@ echo('<div class="col-sm-10 col-sm-offset-1 spaceAbove">');
                                 <div class="col-sm-1 pull-right">
                                     ');
                                         $verifiedAnswer = $SQ_DAO->getUnderStood($question_id, $USER->id);
-                                        if($verifiedAnswer["understood"]){
+                                        if($verifiedAnswer && $verifiedAnswer["understood"]){
                                             echo('<button title="Understood" id="underStand' . $question_id . '"  class="btn-icon fa fa-check-square pull-right verifier verified mainPageGotThis disabled">');
                                         } else {
                                             echo('<button title="Not Yet Understood" id="underStand' . $question_id . '"  class="btn-icon fa fa-square-o pull-right verifier unVerified mainPageGotThis disabled" >');
