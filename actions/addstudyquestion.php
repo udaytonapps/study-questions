@@ -21,10 +21,10 @@ $SQ_DAO = new SQ_DAO($PDOX, $p);
     if ($questionId > -1) {
         $SQ_DAO->updateQuestion($questionId, $questionText, $answerText, $currentTime);
     } else {
-        $SQ_DAO->createQuestion($_SESSION["sq_id"], $questionText, $answerText, $currentTime, $name, $USER->id);
+        $questionId = $SQ_DAO->createQuestion($_SESSION["sq_id"], $questionText, $answerText, $currentTime, $name, $USER->id);
     }
     if($page == "question"){
-        header( 'Location: '.addSession('../view-question.php') ) ;
+        header( 'Location: '.addSession('../view-question.php?q='.$questionId) ) ;
     } else {
         header( 'Location: '.addSession('../question-home.php') ) ;
     }

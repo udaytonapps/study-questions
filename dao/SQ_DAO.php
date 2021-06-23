@@ -11,20 +11,6 @@ class SQ_DAO{
         $this->p = $p;
     }
 
-    function skipSplash($user_id) {
-        $query = "SELECT skip_splash FROM {$this->p}sq_splash WHERE user_id = :userId";
-        $arr = array(':userId' => $user_id);
-        $context = $this->PDOX->rowDie($query, $arr);
-        return ($context && $context["skip_splash"]);
-    }
-
-    function toggleSkipSplash($user_id) {
-        $skip = $this->skipSplash($user_id) ? 0 : 1;
-        $query = "INSERT INTO {$this->p}sq_splash (user_id, skip_splash) VALUES (:userId, ".$skip.") ON DUPLICATE KEY UPDATE skip_splash = ".$skip;
-        $arr = array(':userId' => $user_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function getOrCreateMain($user_id, $context_id, $link_id, $current_time) {
         $main_id = $this->getMainID($context_id, $link_id);
         if (!$main_id) {
@@ -48,27 +34,18 @@ class SQ_DAO{
         return $this->PDOX->lastInsertId();
     }
 
-    function getMainTitle($sq_id) {
-        $query = "SELECT title FROM {$this->p}sq_main WHERE sq_id = :sqId";
-        $arr = array(':sqId' => $sq_id);
-        $title = $this->PDOX->rowDie($query, $arr);
-        return $title ? $title["title"] : "Study Questions";
-    }
-
-    function updateMainTitle($sq_id, $title, $current_time) {
-        $query = "UPDATE {$this->p}sq_main set title = :title, modified = :currentTime WHERE sq_id = :sqId;";
-        $arr = array(':title' => $title, ':currentTime' => $current_time, ':sqId' => $sq_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function deleteMain($sq_id, $user_id) {
         $query = "DELETE FROM {$this->p}sq_main WHERE sq_id = :mainId AND user_id = :userId";
         $arr = array(':mainId' => $sq_id, ':userId' => $user_id);
         $this->PDOX->queryDie($query, $arr);
     }
 
-    function getQuestions($sq_id) {
-        $query = "SELECT * FROM {$this->p}sq_questions WHERE sq_id = :sqId ORDER BY votes DESC";
+    function getQuestions($sq_id, $sortByNew = false) {
+        if ($sortByNew) {
+            $query = "SELECT * FROM {$this->p}sq_questions WHERE sq_id = :sqId ORDER BY modified DESC";
+        } else {
+            $query = "SELECT * FROM {$this->p}sq_questions WHERE sq_id = :sqId ORDER BY votes DESC";
+        }
         $arr = array(':sqId' => $sq_id);
         return $this->PDOX->allRowsDie($query, $arr);
     }
@@ -77,14 +54,6 @@ class SQ_DAO{
         $query = "SELECT * FROM {$this->p}sq_questions WHERE question_id = :questionId;";
         $arr = array(':questionId' => $question_id);
         return $this->PDOX->rowDie($query, $arr);
-    }
-
-    function createFirstQuestion($sq_id, $question_text, $current_time) {
-        $nextNumber = $this->getNextQuestionNumber($sq_id);
-        $query = "INSERT INTO {$this->p}sq_questions (sq_id, question_num, question_txt, modified, permanent) VALUES (:sqId, :questionNum, :questionText, :currentTime, TRUE);";
-        $arr = array(':sqId' => $sq_id, ':questionNum' => $nextNumber, ':questionText' => $question_text, ':currentTime' => $current_time);
-        $this->PDOX->queryDie($query, $arr);
-        return $this->PDOX->lastInsertId();
     }
 
     function createQuestion($sq_id, $question_text, $answerText, $current_time, $author, $user_id) {
@@ -208,9 +177,15 @@ class SQ_DAO{
         return $this->PDOX->rowDie($query, $arr);
     }
 
-    function countQuestionsForStudent($user_id) {
-        $query = "SELECT COUNT(*) as total FROM {$this->p}sq_questions WHERE user_id = :user_id;";
-        $arr = array(':user_id' => $user_id);
+    function countQuestionsForStudent($sq_id, $user_id) {
+        $query = "SELECT COUNT(*) as total FROM {$this->p}sq_questions WHERE sq_id = :sq_id AND user_id = :user_id;";
+        $arr = array(':sq_id' => $sq_id, ':user_id' => $user_id);
+        return $this->PDOX->rowDie($query, $arr)["total"];
+    }
+
+    function countAdditionalAnswersForStudent($sq_id, $user_id) {
+        $query = "SELECT COUNT(*) as total FROM {$this->p}sq_answer WHERE sq_id = :sq_id AND user_id = :user_id;";
+        $arr = array(':sq_qa' => $sq_id, ':user_id' => $user_id);
         return $this->PDOX->rowDie($query, $arr)["total"];
     }
 
@@ -244,24 +219,6 @@ class SQ_DAO{
         $this->PDOX->queryDie($query, $arr);
     }
 
-    function getStudentAnswerVote($question_id, $user_id, $answer_id) {
-        $query = "SELECT vote FROM {$this->p}sq_answer_votes where question_id = :question_id AND user_id = :user_id AND answer_id = :answer_id;";
-        $arr = array(':question_id' => $question_id, ':user_id' => $user_id, ':answer_id' => $answer_id);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
-    function createStudentAnswerVote($question_id, $user_id, $sq_id, $vote, $answer_id) {
-        $query = "INSERT INTO {$this->p}sq_answer_votes (user_id, question_id, sq_id, vote, answer_id) VALUES (:user_id, :question_id, :sq_id, :vote, :answer_id);";
-        $arr = array(':question_id' => $question_id, ':user_id' => $user_id, ':sq_id' => $sq_id,':vote' => $vote, ':answer_id' => $answer_id);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
-    function updateStudentAnswerVotee($question_id, $user_id, $vote, $answer_id) {
-        $query = "UPDATE {$this->p}sq_answer_votes set vote = :vote where question_id = :question_id AND user_id = :user_id AND answer_id = :answer_id;";
-        $arr = array(':question_id' => $question_id, ':user_id' => $user_id, ':vote' => $vote, ':answer_id' => $answer_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
     function getVerified($question_id) {
         $query = "SELECT correct FROM {$this->p}sq_questions where question_id = :question_id;";
         $arr = array(':question_id' => $question_id);
@@ -285,23 +242,4 @@ class SQ_DAO{
         $arr = array(':answer_id' => $answer_id, ':correct' => $correct);
         $this->PDOX->queryDie($query, $arr);
     }
-
-    function createUnderStood($question_id, $user_id, $sq_id, $understood) {
-        $query = "INSERT INTO {$this->p}sq_questions_understood (user_id, question_id, sq_id, understood) VALUES (:user_id, :question_id, :sq_id, :understood);";
-        $arr = array(':question_id' => $question_id, ':user_id' => $user_id, ':sq_id' => $sq_id,':understood' => $understood);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
-    function getUnderStood($question_id, $user_id) {
-        $query = "SELECT understood FROM {$this->p}sq_questions_understood where question_id = :question_id AND user_id = :user_id;";
-        $arr = array(':question_id' => $question_id, ':user_id' => $user_id);
-        return $this->PDOX->rowDie($query, $arr);
-    }
-
-    function updateUnderStood($question_id, $understood, $user_id, $sq_id) {
-        $query = "UPDATE {$this->p}sq_questions_understood set understood = :understood where question_id = :question_id AND user_id = :user_id AND sq_id =:sq_id;";
-        $arr = array(':question_id' => $question_id, ':understood' => $understood, ':user_id' => $user_id, ':sq_id' => $sq_id);
-        $this->PDOX->queryDie($query, $arr);
-    }
-
 }

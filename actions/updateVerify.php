@@ -11,9 +11,7 @@ $p = $CFG->dbprefix;
 
 $SQ_DAO = new SQ_DAO($PDOX, $p);
 
-$user_id = $USER->id;
 $correct = $_POST["correct"];
 $question_id = $_POST["id"];
-$sq_id = $_SESSION["sq_id"];
 
 $SQ_DAO->updateVerified($question_id, $correct);

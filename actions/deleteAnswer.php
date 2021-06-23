@@ -16,4 +16,4 @@ $answer_id = $_GET["answer_id"];
 
 $SQ_DAO->deleteAnswer($answer_id);
 
-header( 'Location: '.addSession('../view-question.php') ) ;
+header( 'Location: '.addSession('../view-question.php?q='.$_GET["q"]) ) ;

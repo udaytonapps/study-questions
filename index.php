@@ -15,27 +15,18 @@ $SQ_DAO = new SQ_DAO($PDOX, $p);
 $currentTime = new DateTime('now', new DateTimeZone($CFG->timezone));
 $currentTime = $currentTime->format("Y-m-d H:i:s");
 
+$canSee = $LAUNCH->link->settingsGet("seecontent", false);
+
 if ( $USER->instructor ) {
     $_SESSION["sq_id"] = $SQ_DAO->getOrCreateMain($USER->id, $CONTEXT->id, $LINK->id, $currentTime);
 
-    $hasQuestions = $SQ_DAO->getQuestions($_SESSION["sq_id"]);
-
-    if (!$hasQuestions) {
-        $skipSplash = $SQ_DAO->skipSplash($USER->id);
-        if ($skipSplash) {
-             header( 'Location: '.addSession('question-home.php') ) ;
-        } else {
-              header('Location: '.addSession('splash.php'));
-        }
-    } else {
-        header( 'Location: '.addSession('question-home.php') ) ;
-    }
+    header( 'Location: '.addSession('question-home.php') ) ;
 } else {
     $mainId = $SQ_DAO->getMainID($CONTEXT->id, $LINK->id);
-    $count = $SQ_DAO->countQuestionsForStudent($USER->id);
+    $count = $SQ_DAO->countQuestionsForStudent($mainId, $USER->id);
     if (!$mainId) {
-        echo ("<h1>The instructor has not set up this tool yet. Please contact your instructor for more info.</h1>");
-    } else if($count < 1) {
+        echo ("<h4>The instructor has not set up this tool yet. Please contact your instructor for more information.</h4>");
+    } else if($count < 1 && !$canSee) {
         $_SESSION["sq_id"] = $mainId;
         header( 'Location: '.addSession('studentSplash.php') ) ;
     } else {

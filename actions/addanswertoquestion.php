@@ -24,4 +24,4 @@ if ($answerId > -1) {
     $SQ_DAO->createAnswer($USER->id, $name, $questionId, $answerText, $currentTime,  $_SESSION["sq_id"]);
 }
 $_SESSION["show"] = true;
-header( 'Location: '.addSession('../view-question.php') ) ;
+header( 'Location: '.addSession('../view-question.php?q='.$questionId) ) ;

@@ -2,8 +2,8 @@
 require_once('../config.php');
 require_once('dao/SQ_DAO.php');
 
-use \Tsugi\Core\LTIX;
-use \SQ\DAO\SQ_DAO;
+use SQ\DAO\SQ_DAO;
+use Tsugi\Core\LTIX;
 
 // Retrieve the launch data if present
 $LAUNCH = LTIX::requireData();
@@ -13,66 +13,43 @@ $p = $CFG->dbprefix;
 $SQ_DAO = new SQ_DAO($PDOX, $p);
 
 $name =$SQ_DAO->findDisplayName($USER->id);
-$toolTitle = $SQ_DAO->getMainTitle($_SESSION["sq_id"]);
+$title = $LAUNCH->link->settingsGet("studytitle", "Study Questions");
 
-//Start of the output
+include("menu.php");
+
+// Start of the output
 $OUTPUT->header();
 
-echo ('<link rel="stylesheet" type="text/css" href="styles/splash.css">
-        <link rel="stylesheet" type="text/css" href="styles/animations.css">');
+echo ('<link rel="stylesheet" type="text/css" href="styles/splash.css">');
 
 $OUTPUT->bodyStart();
 
-echo ('
-    <div class="container-fluid">
+$OUTPUT->topNav($menu);
 
-        <img src="images/standing_idea.png" class="student-splash-img slideInLeft">
+echo '<div class="container">';
 
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-1" id="splashMessage">
-');
-if ("Study Questions" !== $toolTitle) {
-    echo '<h1 class="fadeIn"><small style="color:#fff;">Study Questions</small><br>'.$toolTitle.'</h1>';
-} else {
-    echo '<h1 class="fadeIn">Study Questions</h1>';
-}
-echo('
-                <p class="fadeIn ">
-                    You must add a question/answer before you can see questions/answers submitted by others.
-                </p>
-
-            </div>
-        </div>
-        <div class="col-sm-5 col-sm-offset-6" id="createFirstQuestion">
-            <form method="post" id="createForm" action="actions/addstudyquestion.php">
-                <input type="hidden" name="questionId" id="questionId" value="-1">
-                <input type="hidden" name="username" id="username" value="' .$name . '">
-                <label for="questionText"><h2 class="noTopMargin">Question</h2></label>
-                <textarea class="form-control" name="questionText" id="questionText" rows="4" autofocus required></textarea>
-                <label for="answerText" class="spaceAbove"><h2>Answer</h2></label>
-                <textarea class="form-control" name="answerText" id="answerText" rows="4" autofocus required></textarea>
-                <input type="submit" form="createForm" class="btn btn-success spaceAbove" value="Submit">
-            </form>
-        </div>
-    </div>
-');
-$OUTPUT->footerStart();
+$OUTPUT->pageTitle($title, false, $USER->instructor);
 ?>
-    <script type="text/javascript">
-        function toggleSkipSplash() {
-            $("#spinner").show();
-            var sess = $('input#sess').val();
-            $.ajax({
-                url: "actions/ToggleSkipSplashPage.php?PHPSESSID="+sess,
-                success: function(response){
-                    $("#spinner").hide();
-                    $("#done").show();
-                    setTimeout(function() {
-                        $("#done").fadeOut("slow");
-                    }, 5);
-                }
-            });
-        }
-    </script>
+    <p class="lead">
+        The Study Question tool is designed to let students in a class compile questions and answers that will assist them in studying for an assessment.
+    </p>
+    <p>
+        You must add at least one question and answer that others can use to study from before you will be able to see questions and answers provided by others.</p>
+    <form method="post" id="addQuestionForm" action="actions/addstudyquestion.php">
+        <input type="hidden" name="questionId" id="questionId" value="-1">
+        <input type="hidden" name="username" id="username" value="<?= $name ?>">
+        <div class="form-group">
+            <label for="questionText">Question Text</label>
+            <textarea class="form-control" name="questionText" id="questionText" rows="4" autofocus
+                      required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="answerText" class="spaceAbove">Answer Text</label>
+            <textarea class="form-control" name="answerText" id="answerText" rows="4" required></textarea>
+        </div>
+        <input type="submit" form="addQuestionForm" class="btn btn-success" value="Save">
+    </form>
 <?php
+$OUTPUT->footerStart();
+
 $OUTPUT->footerEnd();
