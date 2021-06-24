@@ -242,4 +242,15 @@ class SQ_DAO{
         $arr = array(':answer_id' => $answer_id, ':correct' => $correct);
         $this->PDOX->queryDie($query, $arr);
     }
+
+    function getTsugiUserId($userId) {
+        $query = "SELECT * FROM {$this->p}lti_user WHERE user_key = :userId;";
+        $arr = array(':userId' => $userId);
+        $ltiUser = $this->PDOX->rowDie($query, $arr);
+        if ($ltiUser !== false) {
+            return $ltiUser["user_id"];
+        } else {
+            return false;
+        }
+    }
 }
