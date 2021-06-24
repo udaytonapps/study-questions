@@ -185,7 +185,7 @@ class SQ_DAO{
 
     function countAdditionalAnswersForStudent($sq_id, $user_id) {
         $query = "SELECT COUNT(*) as total FROM {$this->p}sq_answer WHERE sq_id = :sq_id AND user_id = :user_id;";
-        $arr = array(':sq_qa' => $sq_id, ':user_id' => $user_id);
+        $arr = array(':sq_id' => $sq_id, ':user_id' => $user_id);
         return $this->PDOX->rowDie($query, $arr)["total"];
     }
 
