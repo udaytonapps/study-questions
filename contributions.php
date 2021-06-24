@@ -71,7 +71,7 @@ $OUTPUT->footerStart();
         $(document).ready(function () {
             $("#results").DataTable({
                 order: [[0, "asc"]],
-                dom: 'Bfrtip',
+                dom: 'r<B>itp',
                 buttons: [
                     {
                         extend: 'excelHtml5',
