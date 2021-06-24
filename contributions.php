@@ -22,13 +22,17 @@ include("menu.php");
 // Start of the output
 $OUTPUT->header();
 
+?>
+    <link href="<?= $CFG->staticroot ?>/bootstrap-3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+<?php
 echo ('<link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>');
 
 $OUTPUT->bodyStart();
 
 $OUTPUT->topNav($menu);
 
-echo '<div class="container">';
+echo '<div class="container-fluid">';
 
 $OUTPUT->pageTitle($title, false, false);
 if (!$hasRosters) {
