@@ -22,7 +22,7 @@ include("menu.php");
 // Start of the output
 $OUTPUT->header();
 
-echo ('<link rel="stylesheet" type="text/css" href="styles/splash.css">');
+echo ('<link rel="stylesheet" type="text/css" href="DataTables/datatables.min.css"/>');
 
 $OUTPUT->bodyStart();
 
@@ -66,11 +66,12 @@ if (!$hasRosters) {
 }
 $OUTPUT->footerStart();
 ?>
+    <script type="text/javascript" src="DataTables/datatables.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#results").DataTable({
                 order: [[0, "asc"]],
-                dom: '<"h4"B>t',
+                dom: 'Bfrtip',
                 buttons: [
                     {
                         extend: 'excelHtml5',
