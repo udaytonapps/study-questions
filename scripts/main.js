@@ -142,15 +142,15 @@ const SQuestion = (function () {
         if (verifyBtn.classList.contains('unVerified')) {
             correct = 1;
             verifyBtn.title = "Verified Answer";
-            $(verifyBtn).find(".button-text").text("Verified");
+            $(verifyBtn).find(".button-text").text("Verified answer");
         } else {
             correct = 0;
             verifyBtn.title = "Unverified Answer";
-            $(verifyBtn).find(".button-text").text("Unverified");
+            $(verifyBtn).find(".button-text").text("Mark answer as verified");
         }
         $(verifyBtn).parent(".list-group-item").toggleClass("bg-success");
-        $(verifyBtn).find("span.fa").toggleClass("fa-check-circle-o");
-        $(verifyBtn).find("span.fa").toggleClass("fa-check-circle");
+        $(verifyBtn).find("span.fa").toggleClass("fa-check");
+        $(verifyBtn).find("span.fa").toggleClass("fa-square-o");
         $(verifyBtn).toggleClass("unVerified");
         $(verifyBtn).toggleClass("verified");
         return correct;

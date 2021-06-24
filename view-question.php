@@ -147,21 +147,21 @@ if ($showAnswers) {
         echo ' bg-success';
     }
     echo('" style="padding-bottom: 2rem;">');
-    if ($USER->instructor) {
-        if ($verified["correct"]) {
-            echo(' <button id="verify' . $question_id . '" title="Verified Answer" class="verifier verified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ><span class="fa fa-check-circle" aria-hidden="true"></span> <span class="button-text">Verified</span></button>');
-        } else {
-            echo(' <button id="verify' . $question_id . '" title="Unverified Answer" class="verifier unVerified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ><span class="fa fa-check-circle-o" aria-hidden="true"></span> <span class="button-text">Unverified</span></button>');
-        }
-    } else {
-        if ($verified["correct"]) {
-            echo('<div style="position:absolute;bottom:4px;right:14px;" class="text-success"><span class="fa fa-check"></span> Verified by the instructor</div>');
-        }
+    if (!$USER->instructor && $verified["correct"]) {
+        echo('<div style="position:absolute;bottom:4px;right:14px;" class="text-success"><span class="fa fa-check"></span> Verified by the instructor</div>');
     }
     echo('
                 <p class="answerText">' . $question["answer_txt"] . '</p>
                 <p class="small text-muted" style="position:absolute; bottom: 0;">Submitted by ' . $question["author"] . ' on ' . $date . ' at ' . $time . '</p>
-                </div>
+                ');
+    if ($USER->instructor) {
+        if ($verified["correct"]) {
+            echo(' <a href="javascript:void(0);" id="verify' . $question_id . '" title="Verified Answer" class="verifier verified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ><span class="fa fa-check" aria-hidden="true"></span> <span class="button-text">Verified answer</span></a>');
+        } else {
+            echo(' <a href="javascript:void(0);" id="verify' . $question_id . '" title="Unverified Answer" class="verifier unVerified" onclick="SQuestion.verifyAnswer(' . $question_id . ')" ><span class="fa fa-square-o" aria-hidden="true"></span> <span class="button-text">Mark answer as verified</span></a>');
+        }
+    }
+    echo('</div>
               </div>'); // end list group
 
     $answers = $SQ_DAO->getAllAnswersToQuestion($question_id);
@@ -180,16 +180,8 @@ if ($showAnswers) {
             echo ' bg-success';
         }
         echo('" style="padding-bottom: 2rem;">');
-        if ($USER->instructor) {
-            if ($verifiedAnswer["correct"]) {
-                echo(' <button id="verifyA' . $answer_id . '" title="Verified Answer" class="verifier verified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')" ><span class="fa fa-check-circle" aria-hidden="true"></span> <span class="button-text">Verified</span></button>');
-            } else {
-                echo(' <button id="verifyA' . $answer_id . '" title="Unverified Answer" class="verifier unVerified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')" ><span class="fa fa-check-circle-o" aria-hidden="true"></span> <span class="button-text">Unverified</span></button>');
-            }
-        } else {
-            if ($verifiedAnswer["correct"]) {
-                echo('<div style="position:absolute;bottom:4px;right:14px;" class="text-success"><span class="fa fa-check"></span> Verified by the instructor</div>');
-            }
+        if (!$USER->instructor && $verifiedAnswer["correct"]) {
+            echo('<div style="position:absolute;bottom:4px;right:14px;" class="text-success"><span class="fa fa-check"></span> Verified by the instructor</div>');
         }
         if (($USER->instructor) || ($answer["user_id"] == $USER->id)) {
             echo('<div class="pull-right">
@@ -227,8 +219,16 @@ if ($showAnswers) {
         }
 
         echo '   <p class="answerText">' . $answer["answer_txt"] . '</p>
-                <p class="small text-muted" style="position:absolute; bottom: 0;">Submitted by ' . $answer["author"] . ' on ' . $date . ' at ' . $time . '</p>
-                </div>'; // end list group item
+                <p class="small text-muted" style="position:absolute; bottom: 0;">Submitted by ' . $answer["author"] . ' on ' . $date . ' at ' . $time . '</p>';
+
+        if ($USER->instructor) {
+            if ($verifiedAnswer["correct"]) {
+                echo(' <a href="javascript:void(0);" id="verifyA' . $answer_id . '" title="Verified Answer" class="verifier verified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')" ><span class="fa fa-check" aria-hidden="true"></span> <span class="button-text">Verified answer</span></a>');
+            } else {
+                echo(' <a href="javascript:void(0);" id="verifyA' . $answer_id . '" title="Unverified Answer" class="verifier unVerified" onclick="SQuestion.verifyUserAnswer(' . $answer_id . ')" ><span class="fa fa-square-o" aria-hidden="true"></span> <span class="button-text">Mark answer as verified</span></a>');
+            }
+        }
+                echo'</div>'; // end list group item
     }
     echo('
             <div class="list-group-item" id="addAnswer" style="display:none;margin-bottom:2rem;">

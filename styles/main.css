@@ -65,22 +65,18 @@ p.answerText {
 .text-muted {
     color: #555;
 }
-button.verifier {
+a.verifier {
     position: absolute;
     bottom: 4px;
     right: 14px;
     z-index: 2;
 }
-button.verified {
-    color: #fff;
-    background-color: #28a745;
-    border-color: #28a745;
-    border-radius: 4px;
+a.verifier:hover, a.verifier:focus {
+    text-decoration: none;
+    opacity: 0.8;
 }
-button.verified:hover {
-    color: #fff;
-    background-color: #218838;
-    border-color: #1e7e34;
+a.verifier.verified {
+    color: #3c763d;
 }
 a.reveal-box {
     font-size: 24px;
