@@ -109,7 +109,7 @@ if (($USER->instructor) || ($question["user_id"] == $USER->id)) {
                     </div> ');
 }
 
-echo('<h4>Question</h4><div class="list-group" style="clear:both;">
+echo('<h3>Question</h3><div class="list-group" style="clear:both;">
             <div class="list-group-item" style="display:flex;">
                 <div class="vote-container">
                 <button id="upVote' . $question_id . '"  ');
@@ -141,7 +141,7 @@ echo('<div style="flex-grow:1;padding-bottom: 2rem;">
 echo('</div>'); // end list group
 
 if ($showAnswers) {
-    echo('<h4>Answer</h4><div class="list-group">
+    echo('<h3>Answer</h3><div class="list-group">
                 <div class="list-group-item');
     if ($verified["correct"]) {
         echo ' bg-success';
@@ -249,7 +249,7 @@ if ($showAnswers) {
             </div>
 ');
     echo '</div>
-            <a href="#" onclick="toggleAddAnswer();" id ="addAnswerButton" class="btn btn-success"><span class="fa fa-plus"></span> Add Answer</a>
+            <a href="#" onclick="toggleAddAnswer();" id ="addAnswerButton" class="btn btn-default"><span class="fa fa-plus"></span> Add Answer</a>
             '; // end list group
 } else {
     // Don't show answers
