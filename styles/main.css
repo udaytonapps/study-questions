@@ -93,6 +93,7 @@ a.reveal-box:hover {
 /* Bootstrap theme changes */
 .navbar {
     margin-bottom: 0;
+    font-family: sans-serif;
 }
 .navbar-header {
     padding-top: 0.23rem;
@@ -193,7 +194,7 @@ a.reveal-box:hover {
     border-radius: 0;
 }
 .navbar-inverse .nav > li {
-    font-size: 1.23rem;
+    font-size: 1.63rem;
     margin-top: 0.43rem;
     margin-bottom: 0.43rem;
     padding: 0 0.43rem;
@@ -210,7 +211,7 @@ a.reveal-box:hover {
 .navbar-inverse .navbar-brand,
 .navbar-inverse .navbar-brand:hover,
 .navbar-inverse .navbar-brand:focus {
-    font-size: 1.64rem;
+    font-size: 1.84rem;
     opacity: 1;
 }
 .navbar-inverse .nav > li > a:active,
@@ -318,7 +319,7 @@ a.reveal-box:hover {
     border-radius: 0;
 }
 .navbar-default .nav > li {
-    font-size: 1.23rem;
+    font-size: 1.63rem;
     margin-top: 0.43rem;
     margin-bottom: 0.43rem;
     padding: 0 0.43rem;
@@ -344,7 +345,7 @@ a.reveal-box:hover {
 .navbar-default .navbar-brand,
 .navbar-default .navbar-brand:hover,
 .navbar-default .navbar-brand:focus {
-    font-size: 1.64rem;
+    font-size: 1.84rem;
     opacity: 1;
 }
 .navbar-default .nav > li > a:active,
@@ -453,3 +454,8 @@ h1.splash-header {
 /* https://stackoverflow.com/questions/23001424/how-do-i-get-rid-of-this-blue-halo-around-the-close-dialog-button-with-jqueryui */
 
 .ui-button:focus { outline:none !important }
+
+.checkbox {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

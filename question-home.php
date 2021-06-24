@@ -59,7 +59,7 @@ $OUTPUT->topNav($menu);
 
 echo '<div class="container-fluid">';
 
-$OUTPUT->pageTitle($title, false, $USER->instructor);
+$OUTPUT->pageTitle($title, true, $USER->instructor);
 
 $questions = $SQ_DAO->getQuestions($_SESSION["sq_id"], $sortByNew);
 
@@ -155,6 +155,10 @@ if ($USER->instructor) {
         </div>
     </div>
 <?php
+$OUTPUT->helpModal("Study Questions", __('
+                        <h4>Help Goes Here</h4>
+                        '));
+
 $OUTPUT->footerStart();
 ?>
     <!-- Our main javascript file for tool functions -->
