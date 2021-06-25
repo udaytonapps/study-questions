@@ -32,10 +32,11 @@ echo '<div class="container-fluid">';
 $OUTPUT->pageTitle($title, false, $USER->instructor);
 ?>
     <p class="lead">
-        The Study Question tool is designed to let students in a class compile questions and answers that will assist them in studying for an assessment.
+        The Study Question tool is designed to let students in a class compile and share questions and answers that assist them in studying for an upcoming assessment.
     </p>
-    <p>
-        You must add at least one question and answer that others can use to study from before you will be able to see questions and answers provided by others.</p>
+    <p class="lead">
+        You must add at least one question and answer that others can use to study from before you will be able to see questions and answers provided by others.
+    </p>
     <form method="post" id="addQuestionForm" action="actions/addstudyquestion.php">
         <input type="hidden" name="questionId" id="questionId" value="-1">
         <input type="hidden" name="username" id="username" value="<?= $name ?>">

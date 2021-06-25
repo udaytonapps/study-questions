@@ -66,11 +66,8 @@ $questions = $SQ_DAO->getQuestions($_SESSION["sq_id"], $sortByNew);
 $_SESSION["show"] = false;
 
 $name = $SQ_DAO->findDisplayName($USER->id);
-if ($USER->instructor) {
-    echo '<p class="lead">This Study Questions tool is now set up and ready for student access. Students will be asked to add a question and answer that can help their peers study for an upcoming assessment.</p>';
-} else {
-    echo '<p class="lead">Click on the cards below to study the questions and answers added by you and your peers. You can also add additional answers to any question and see the other answers that were added.';
-}
+    echo '<p class="lead">The Study Question tool is designed to let students in a class compile and share questions and answers that assist them in studying for an upcoming assessment.</p>';
+    echo '<p class="lead">Click on the cards below to review the questions and answers added by you and your peers. You can add additional questions at any time or add answers or information to existing questions. You can also upvote or downvote questions based on their accuracy or usefulness. Answers that have been marked as  verified by an instructor will be indicated when reviewing a question.';
 
 ?>
     <p>
@@ -87,6 +84,11 @@ if ($USER->instructor) {
         </div>
     </form>
     <h3>All Questions</h3>
+<?php
+if (!$questions || count($questions) < 1) {
+    echo '<div class="alert alert-warning">There have been no study questions added yet. The list of questions will show here as they are added.</div>';
+} else {
+?>
     <div class="list-group" style="clear:both;">
         <?php
         foreach ($questions as $question) {
@@ -125,6 +127,9 @@ if ($USER->instructor) {
         }
         ?>
     </div> <!-- End list group -->
+    <?php
+}
+    ?>
     </div> <!-- End container -->
     <div class="modal fade" id="addQuestion" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
@@ -155,10 +160,37 @@ if ($USER->instructor) {
         </div>
     </div>
 <?php
-$OUTPUT->helpModal("Study Questions", __('
-                        <h4>Help Goes Here</h4>
+if ($USER->instructor) {
+    $OUTPUT->helpModal("Study Questions", __('
+                        <h4>General Help</h4>
+                        <p>Use this learning app to add, review, verify, and vote on study questions and answers.</p>
+                        <p><a href="https://ewiki.udayton.edu/isidore/Study_Questions" target="_blank">Learn more <span class="fa fa-external-link" aria-hidden="true"></span></a> about Study Questions</p>
+                        <h5>Adding a Study Question and Answer</h5>
+                        <ol><li>Click on “Add Question”.</li><li>Enter a question and answer in the text box.</li><li>Click on “Save”.</li></ol>
+                        <h5>Voting on Questions</h5>
+                        <p>To upvote or downvote a question, click on the upward or downward arrows next to it. Questions with the most upvotes will appear at the top of the list, while questions with the most downvotes will appear at the bottom of the list.</p>
+                        <h5>Reviewing Study Questions and Answers</h5>
+                        <ol><li>Click on a question to review it.</li><li>Click on "Click to Reveal Answer" to review the answer and additional answers.</li></ol>
+                        <h5>Verifying Answers</h5>
+                        <p>Once you’ve clicked to reveal the answer, you can click on “Mark answer as verified” so that students know their additions have been reviewed and verified. Additional answers have the “Mark answer as verified” link next to them as well.</p>
                         '));
-
+} else {
+    $OUTPUT->helpModal("Study Questions", __('
+                        <h4>General Help</h4>
+                        <p>Use this learning app to add, review, and vote on study questions and answers added by you and your peers.</p>
+                        <p><a href="https://ewiki.udayton.edu/isidore/Study_Questions" target="_blank">Learn more <span class="fa fa-external-link" aria-hidden="true"></span></a> about Study Questions</p>
+                        <h5>Adding a Study Question and Answer</h5>
+                        <ol><li>Click on “Add Question”.</li><li>Enter a question and answer in the text box.</li><li>Click on “Save”.</li></ol>
+                        <h5>Voting on Questions</h5>
+                        <p>To upvote or downvote a question, click on the upward or downward arrows next to it. Questions with the most upvotes will appear at the top of the list, while questions with the most downvotes will appear at the bottom of the list.</p>
+                        <h5>Viewing Answers</h5>
+                        <ol><li>Click on a question to review it.</li><li>Click on "Click to Reveal Answer" to review the answer and additional answers.</li></ol>
+                        <h5>Verifying Answers</h5>
+                        <p>Once you’ve clicked to reveal the answer, you can click on “Mark answer as verified” so that students know their additions have been reviewed and verified. Additional answers have the “Mark answer as verified” link next to them as well.</p>
+                        <h5>Providing Additional Answers</h5>
+                        <ol><li>Click on a question to review it.</li><li>Click on “Click to Reveal Answer”.</li><li>Click on “Add Answer”.</li><li>Type the additional answer into the text box.</li><li>Click on “Save”.</li></ol>
+                        '));
+}
 $OUTPUT->footerStart();
 ?>
     <!-- Our main javascript file for tool functions -->

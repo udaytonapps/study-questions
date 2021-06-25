@@ -455,3 +455,6 @@ h1.splash-header {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+#toolTitle button {
+    font-size: 1.63rem;
+}
