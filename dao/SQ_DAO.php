@@ -24,7 +24,11 @@ class SQ_DAO{
         $query = "SELECT sq_id FROM {$this->p}sq_main WHERE context_id = :context_id AND link_id = :link_id";
         $arr = array(':context_id' => $context_id, ':link_id' => $link_id);
         $context = $this->PDOX->rowDie($query, $arr);
-        return $context["sq_id"];
+        if (!$context) {
+            return false;
+        } else {
+            return $context["sq_id"];
+        }
     }
 
     function createMain($user_id, $context_id, $link_id, $current_time) {

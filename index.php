@@ -26,6 +26,7 @@ if ( $USER->instructor ) {
     $count = $SQ_DAO->countQuestionsForStudent($mainId, $USER->id);
     if (!$mainId) {
         echo ("<h4>The instructor has not set up this tool yet. Please contact your instructor for more information.</h4>");
+        return;
     } else if($count < 1 && !$canSee) {
         $_SESSION["sq_id"] = $mainId;
         header( 'Location: '.addSession('studentSplash.php') ) ;
