@@ -67,7 +67,6 @@ $question_id = $question["question_id"];
 $dateTime = new DateTime($question["modified"]);
 $date = date_format($dateTime, "n/j/y");
 $time = date_format($dateTime, "g:i A");
-$answerId = -1;
 $previousVote = $SQ_DAO->getStudentVote($question_id, $USER->id);
 $verified = $SQ_DAO->getVerified($question_id);
 
@@ -185,14 +184,14 @@ if ($showAnswers) {
         }
         if (($USER->instructor) || ($answer["user_id"] == $USER->id)) {
             echo('<div class="pull-right">
-                    <a href="#editAnswer' . $answerId . '" data-toggle="modal"><span class="fa fa-pencil" aria-hidden="true"></span> Edit Answer</a>
-                    <div class="modal fade" id="editAnswer' . $answerId . '" tabindex="-1" role="dialog" aria-hidden="true">
+                    <a href="#editAnswer' . $answer_id . '" data-toggle="modal"><span class="fa fa-pencil" aria-hidden="true"></span> Edit Answer</a>
+                    <div class="modal fade" id="editAnswer' . $answer_id . '" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h4 class="modal-title">Edit Answer</h4>
                                 </div>
-                                <form method="post" id="editAnswerForm' . $answerId . '" action="actions/addanswertoquestion.php">
+                                <form method="post" id="editAnswerForm' . $answer_id . '" action="actions/addanswertoquestion.php">
                                     <div class="modal-body">
                                             <input type="hidden" name="answerId" id="answerId" value="' . $answer_id . '">
                                             <input type="hidden" name="questionId" id="questionId" value="' . $question_id . '">
@@ -208,7 +207,7 @@ if ($showAnswers) {
                         <span aria-hidden="true" class="fa fa-trash text-danger"></span>
                         <span class="text-danger">Delete Answer</span>
                     </a>
-                                        <input type="submit" form="editAnswerForm' . $answerId . '" class="btn btn-success" value="Save">
+                                        <input type="submit" form="editAnswerForm' . $answer_id . '" class="btn btn-success" value="Save">
                                         <button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
                                     </div>
                                 </form>
